@@ -1,8 +1,6 @@
 package omods.core.users;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,12 +13,13 @@ import omods.core.constants.Roles;
 @AllArgsConstructor
 @Data
 @Builder
-public class user {
+public class User {
     private long userID;
     private String name;
     private String email;
     private String mobile;
     @Column(name = "password", nullable = false)
     private String psw;
+    @Enumerated(EnumType.STRING)
     private Roles roles;
 }
