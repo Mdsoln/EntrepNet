@@ -14,12 +14,25 @@ import omods.core.constants.Roles;
 @Data
 @Builder
 public class User {
-    private long userID;
+    @Id
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
+    private Long userID;
+
     private String name;
     private String email;
     private String mobile;
+
     @Column(name = "password", nullable = false)
     private String psw;
+
     @Enumerated(EnumType.STRING)
     private Roles roles;
 }
