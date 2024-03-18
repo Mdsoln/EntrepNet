@@ -1,4 +1,5 @@
 package omods.core.chatapp.chat;
 
-public class MessageType {
+public enum MessageType {
+
 }
