@@ -24,18 +24,7 @@ public class UserService implements UserServiceInterface {
                 throw new EmailExistException("Already exists user with same email!");
             }
 
-            User newUser = new User();
-            newUser.setName(userDto.getFirstname() + " " + userDto.getSurname());
-            newUser.setEmail(newUser.getEmail());
-            newUser.setPsw(userDto.getPsw());
-            newUser.setMobile(userDto.getMobile());
-            if (userDto.getRole().equalsIgnoreCase("MENTOR")){
-                newUser.setRoles(Roles.MENTOR);
-            } else if (userDto.getRole().equalsIgnoreCase("ENTREPRENEUR")) {
-                newUser.setRoles(Roles.ENTREPRENEUR);
-            }else {
-                newUser.setRoles(Roles.ADMIN);
-            }
+            User newUser = getNewUser(userDto);
 
             userRepository.save(newUser);
             return ResponseEntity.ok("You have successfully created your account");
@@ -43,5 +32,21 @@ public class UserService implements UserServiceInterface {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to save user: " + e.getMessage());
         }
+    }
+
+    private static User getNewUser(UserDto userDto) {
+        User newUser = new User();
+        newUser.setName(userDto.getFirstname() + " " + userDto.getSurname());
+        newUser.setEmail(newUser.getEmail());
+        newUser.setPsw(userDto.getPsw());
+        newUser.setMobile(userDto.getMobile());
+        if (userDto.getRole().equalsIgnoreCase("MENTOR")){
+            newUser.setRoles(Roles.MENTOR);
+        } else if (userDto.getRole().equalsIgnoreCase("ENTREPRENEUR")) {
+            newUser.setRoles(Roles.ENTREPRENEUR);
+        }else {
+            newUser.setRoles(Roles.ADMIN);
+        }
+        return newUser;
     }
 }
