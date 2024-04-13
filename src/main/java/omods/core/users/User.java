@@ -26,6 +26,9 @@ public class User {
     )
     private Long userID;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private Profile profile;
+
     private String name;
     private String email;
     private String mobile;
