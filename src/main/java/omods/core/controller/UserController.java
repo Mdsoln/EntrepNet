@@ -1,6 +1,7 @@
 package omods.core.controller;
 
 import lombok.RequiredArgsConstructor;
+import omods.core.dto.ProfileDetails;
 import omods.core.dto.UserDto;
 import omods.core.service.impl.UserService;
 import org.springframework.http.ResponseEntity;
@@ -19,5 +20,10 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerNewUser(@RequestBody UserDto userDto){
         return userService.registerNewUser(userDto);
+    }
+
+    @PostMapping("/complete-profile")
+    public ResponseEntity<String> completeProfile(@RequestBody ProfileDetails profileDetails){
+      return userService.completeProfile(profileDetails);
     }
 }
