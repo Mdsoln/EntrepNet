@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
+
     @Override
     public ResponseEntity<String> registerNewUser(UserDto userDto) {
         try {
@@ -25,9 +26,9 @@ public class UserService implements UserServiceInterface {
             }
 
             User newUser = getNewUser(userDto);
-
             userRepository.save(newUser);
-            return ResponseEntity.ok("You have successfully created your account");
+            return ResponseEntity.ok("Email: " + userDto.getEmail());
+
         }catch (EmailExistException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error: "+ e.getMessage());
@@ -41,7 +42,7 @@ public class UserService implements UserServiceInterface {
     private static User getNewUser(UserDto userDto) {
         User newUser = new User();
         newUser.setName(userDto.getFirstname() + " " + userDto.getSurname());
-        newUser.setEmail(newUser.getEmail());
+        newUser.setEmail(userDto.getEmail());
         newUser.setPsw(userDto.getPsw());
         newUser.setMobile(userDto.getMobile());
         if (userDto.getRole().equalsIgnoreCase("MENTOR")){
