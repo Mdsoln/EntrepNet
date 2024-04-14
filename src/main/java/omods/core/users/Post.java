@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "post")
 @NoArgsConstructor
@@ -31,4 +33,18 @@ public class Post {
     private String postImage;
     @Column(name = "posted_from", nullable = false)
     private String location;
+    @Column(name = "createdAt", nullable = false)
+    private LocalDate postCreatedAt;
+    @Column(name = "updatedAt")
+    private LocalDate postUpdatedAt;
+    @PrePersist
+    public void onCreate(){
+        postCreatedAt = LocalDate.now();
+    }
+
+    @PreUpdate
+    public void onUpdate(){
+        postUpdatedAt= LocalDate.now();
+    }
+
 }
