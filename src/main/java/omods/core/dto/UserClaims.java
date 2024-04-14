@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserClaims {
-    private String userRoles;
+    private String role;
     private String topic;
 }

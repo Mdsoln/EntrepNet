@@ -54,10 +54,21 @@ public class UserService implements UserServiceInterface {
                 throw new ExceptionHandlerManager("User not found with email: "+ profileDetails.getEmail());
             }
 
-            String userRole = profileDetails.getUserClaims().getFirst().getUserRoles();
+            if (profileDetails.getUserClaims().isEmpty()) {
+                throw new ExceptionHandlerManager("Missing user claims in profile details");
+            }
+
+            String userRole = profileDetails.getUserClaims().getFirst().getRole();
             String topic = profileDetails.getUserClaims().getFirst().getTopic();
 
-            creator.setRoles(Roles.valueOf(userRole));
+            if (userRole.equalsIgnoreCase("MENTOR")){
+                creator.setRoles(Roles.MENTOR);
+            } else if (userRole.equalsIgnoreCase("ENTREPRENEUR")) {
+                creator.setRoles(Roles.ENTREPRENEUR);
+            } else {
+                creator.setRoles(Roles.ADMIN);
+            }
+
             userRepository.save(creator);
 
             Profile profile = Profile
@@ -85,13 +96,13 @@ public class UserService implements UserServiceInterface {
         newUser.setEmail(userDto.getEmail());
         newUser.setPsw(userDto.getPsw());
         newUser.setMobile(userDto.getMobile());
-        if (userDto.getRole().equalsIgnoreCase("MENTOR")){
+        /*if (userDto.getRole().equalsIgnoreCase("MENTOR")){
             newUser.setRoles(Roles.MENTOR);
         } else if (userDto.getRole().equalsIgnoreCase("ENTREPRENEUR")) {
             newUser.setRoles(Roles.ENTREPRENEUR);
         }else {
             newUser.setRoles(Roles.ADMIN);
-        }
+        }*/
         return newUser;
     }
 }
