@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/v1/post")
 @RequiredArgsConstructor
@@ -22,4 +24,11 @@ public class PostCreationController {
            ){
       return postService.createPost(postContent, postedFrom, imagePath);
    }
+
+   @GetMapping("/recentPosts")
+   public ResponseEntity<List<Post>> getRecentPosts(){
+      List<Post> recentPosts = postService.getRecentPosts();
+      return ResponseEntity.ok(recentPosts);
+   }
+   
 }

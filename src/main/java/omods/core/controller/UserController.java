@@ -5,10 +5,7 @@ import omods.core.dto.ProfileDetails;
 import omods.core.dto.UserDto;
 import omods.core.service.impl.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/user")
@@ -26,4 +23,6 @@ public class UserController {
     public ResponseEntity<String> completeProfile(@RequestBody ProfileDetails profileDetails){
       return userService.completeProfile(profileDetails);
     }
+
+    //query name, Job, role, image
 }

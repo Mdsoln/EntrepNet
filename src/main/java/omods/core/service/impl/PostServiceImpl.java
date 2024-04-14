@@ -5,6 +5,7 @@ import omods.core.exc.ExceptionHandlerManager;
 import omods.core.repo.PostRepo;
 import omods.core.service.inter.PostService;
 import omods.core.users.Post;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -43,6 +45,15 @@ public class PostServiceImpl implements PostService {
             throw new ExceptionHandlerManager("Error: "+exception);
         } catch (Exception exception){
             throw new RuntimeException("Error: " + exception);
+        }
+    }
+
+    @Override
+    public List<Post> getRecentPosts() {
+        try {
+            return postRepo.findRecentPosts();
+        }catch (DataAccessException dataAccessException){
+            throw new ExceptionHandlerManager("Error: " + dataAccessException);
         }
     }
 
