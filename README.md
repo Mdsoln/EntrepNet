@@ -1,7 +1,4 @@
 
-
-
-
 Path: /api/v1/user
 
 * **URL:** /register
@@ -34,15 +31,68 @@ Path: /api/v1/user
     * Status Code: 500 Internal Server Error
     * Body: "Failed to save user:  {error message}"
 
-**Logic:**
+Endpoint:  /complete-profile
 
-1. The endpoint receives a POST request with a UserDto object in the request body.
-2. It calls the `registerNewUser` method in the UserService.
-3. The UserService checks for existing users with the same email address.
-4. If no existing user is found:
-    * Creates a new User object from the UserDto.
-    * Sets the user's role based on the provided role string.
-    * Saves the new user to the database.
-    * Returns a success response with the message "You have successfully created your account".
-5. If an existing user with the same email is found, an EmailExistException is thrown, resulting in a 400 Bad Request response.
-6. If any other errors occur during user creation, a 500 Internal Server Error response is returned with an error message.
+Method: POST
+
+Description: This endpoint allows users to complete their profile information after registration.
+
+Request Body:
+
+The request body should be a JSON object representing a ProfileDetails object with the following properties:
+
+    * email (String): The user's email address.
+    * job (String): The user's job title (optional).
+    * locatedAt (String): The user's location (optional).
+    * userClaims (List<UserClaims>): A list containing user claims (at least one claim is required).
+
+
+UserClaims Object:
+
+The userClaims list contains objects with the following properties:
+
+    * role (String): The user's role (e.g., "MENTOR", "ENTREPRENEUR").
+    * topic (String): The user's topic of expertise (optional).
+
+Response:
+
+On success, the endpoint returns a 200 OK status code with a JSON response body containing a message: "Profile completed successfully".
+
+On error, the endpoint returns an appropriate HTTP status code with a JSON response body containing an error message. Possible error responses include:
+
+    * **400 Bad Request:**
+       * Missing user in request body.
+       * User not found by email.
+       * Missing user claims in profile details.
+
+    * **500 Internal Server Error:** Unexpected error during profile completion.
+
+Example Request:
+JSON
+
+{
+  "email": "john.doe@example.com",
+  "job": "Software Engineer",
+  "locatedAt": "New York, NY",
+  "userClaims": [
+    {
+      "role": "MENTOR",
+      "topic": "Machine Learning"
+    }
+  ]
+}
+
+Example Response (Success):
+JSON
+
+{
+  "message": "Profile completed successfully"
+}
+
+Example Response (Error - Missing User Claims):
+JSON
+
+{
+  "error": "Missing user claims in profile details"
+}
+
