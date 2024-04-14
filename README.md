@@ -1,12 +1,11 @@
-
-Path: /api/v1/user
+**Path: /api/v1/user**
 
 * **URL:** /register
 * **Method:** POST
 
 **Purpose:**
 
-* Registers a new user in the system.
+Registers a new user in the system.
 
 **Request Body:**
 
@@ -29,47 +28,46 @@ Path: /api/v1/user
     * Body: "Already exists user with same email!"
 * **Internal Server Error:**
     * Status Code: 500 Internal Server Error
-    * Body: "Failed to save user:  {error message}"
+    * Body: "Failed to save user: {error message}"
 
-Endpoint:  /complete-profile
+**Endpoint:**  /complete-profile
 
-Method: POST
+**Method:** POST
 
-Description: This endpoint allows users to complete their profile information after registration.
+**Description:** This endpoint allows users to complete their profile information after registration.
 
-Request Body:
+**Request Body:**
 
-The request body should be a JSON object representing a ProfileDetails object with the following properties:
+The request body should be a JSON object representing a `ProfileDetails` object with the following properties:
 
     * email (String): The user's email address.
     * job (String): The user's job title (optional).
     * locatedAt (String): The user's location (optional).
     * userClaims (List<UserClaims>): A list containing user claims (at least one claim is required).
 
+**UserClaims Object:**
 
-UserClaims Object:
-
-The userClaims list contains objects with the following properties:
+The `userClaims` list contains objects with the following properties:
 
     * role (String): The user's role (e.g., "MENTOR", "ENTREPRENEUR").
     * topic (String): The user's topic of expertise (optional).
 
-Response:
+**Response:**
 
 On success, the endpoint returns a 200 OK status code with a JSON response body containing a message: "Profile completed successfully".
 
 On error, the endpoint returns an appropriate HTTP status code with a JSON response body containing an error message. Possible error responses include:
 
-    * **400 Bad Request:**
-       * Missing user in request body.
-       * User not found by email.
-       * Missing user claims in profile details.
+    * 400 Bad Request:
+        * Missing user in request body.
+        * User not found by email.
+        * Missing user claims in profile details.
 
-    * **500 Internal Server Error:** Unexpected error during profile completion.
+    * 500 Internal Server Error: Unexpected error during profile completion.
 
-Example Request:
-JSON
+**Example Request:**
 
+```json
 {
   "email": "john.doe@example.com",
   "job": "Software Engineer",
@@ -82,17 +80,16 @@ JSON
   ]
 }
 
-Example Response (Success):
-JSON
+**Example Response (Success):**
 
+```json
 {
   "message": "Profile completed successfully"
 }
 
-Example Response (Error - Missing User Claims):
-JSON
+**Example Response (Error - Missing User Claims):**
 
+```json
 {
   "error": "Missing user claims in profile details"
 }
-
