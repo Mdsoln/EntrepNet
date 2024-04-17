@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useFormik } from "formik";
+import { Field, useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "./Button";
 import FormHeader from "./FormHeader";
@@ -14,17 +14,18 @@ export default function ProfileForm() {
   
   const formik = useFormik({
     initialValues: {
-      qn1: "",
-      qn2: "",
-      topics: [],
+      job: "",
+      location: "",
+      role:""
     },
     validationSchema: Yup.object({
-      qn1: Yup.string().required("This field is required"),
-      qn2: Yup.string().required("This field is required"),
+      job: Yup.string().required("This field is required"),
+      location: Yup.string().required("This field is required"),
+      role: Yup.string().required("This field is required"),
     }),
     onSubmit: async (values) => {
       try {
-        values.topics = TopicsTabs.getSelectedTopics();
+
         alert(JSON.stringify(values, null, 2));
         router.push("/home");
       } catch (error) {
@@ -42,16 +43,24 @@ export default function ProfileForm() {
               What is your main job?
             </div>
             <div className="font-light text-sm text-white text-nowrap">
-              A job to display on your profile{" "}
+              A job to display on your profile
             </div>
           </div>
           <div>
             <input
               type="text"
-              name="qn1"
-              id="qn1"
+              name="job"
+              id="job"
               className="border-b outline-none bg-inherit"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.job}
             />
+             {formik.touched.job && formik.errors.job? (
+              <span className="text-sm font-light text-red-500">
+                {formik.errors.job}
+              </span>
+            ) : null}
           </div>
         </div>
         <div className="flex gap-x-2">
@@ -66,12 +75,35 @@ export default function ProfileForm() {
             </div>
           </div>
           <div>
-            <input type="text" name="qn2" id="qn2" className="border-b outline-none bg-inherit" />
+            <input 
+            type="text" 
+            name="location" 
+            id="location" 
+            className="border-b outline-none bg-inherit " 
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.location}
+            
+            />
+             {formik.touched.location && formik.errors.location? (
+              <span className="text-sm font-light text-red-500">
+                {formik.errors.location}
+              </span>
+            ) : null}
           </div>
         </div>
           
         <div className="flex gap-x-4">
-            <input type="checkbox" name="role" id="role" />
+            <select
+             id="role"
+             name="role" 
+             onChange={formik.handleChange}
+             onBlur={formik.handleBlur}
+             value={formik.values.role}
+            >
+              <option value="mentor">mentor</option>
+              <option value="enterpreneur">enterpreneur</option>
+            </select>
             <label htmlFor="role" className="font-bold text-lg text-white">I am an expert in my field and I want to become a 
 mentor.</label>
         </div>

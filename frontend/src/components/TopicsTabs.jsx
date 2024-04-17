@@ -22,10 +22,6 @@ export default function TopicsTabs() {
     setSelectedTopics([...selectedTopics, choice]);
   };
 
-  const getSelectedTopics = () => {
-    return selectedTopics;
-  };
-
   return (
     <>
       <div className="grid grid-cols-1 gap-y-4">
