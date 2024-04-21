@@ -23,8 +23,7 @@ public class NotificationServiceImpl implements Notification {
         SmsApi smsApi = new SmsApi(apiClient);
 
         SmsMessage smsMessage = new SmsMessage();
-        smsMessage.body("Your new password: "+newPassword);
-        smsMessage.from("EntrepNet");
+        smsMessage.body(newPassword+" is your new password for EntrepNet");
         smsMessage.to(mobile);
         smsMessage.source("Spring Boot Application");
 
