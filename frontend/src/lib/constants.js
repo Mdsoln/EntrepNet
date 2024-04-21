@@ -18,11 +18,33 @@ export const imageSet2 = [
         src:"/mkulima.svg",  
         class:"col-start-2"       
     },
-
    
     {
         name:"image4",
         src:"/cherehani.svg",
         class:"" ,     
     },
+]
+
+
+
+export const Followings = [
+    {
+        name:"Jane Baker",
+        job:"Cake baker",
+        role:"Mentor",
+        src:"/profile.svg"
+    },
+    {
+        name:"Jane John",
+        job:"Cake baker",
+        role:"Enterpreneur",
+        src:"/profile.svg"
+    },
+    {
+        name:"John Baker",
+        job:"Cake baker",
+        role:"Mentor",
+        src:"/profile.svg"
+    }
 ]
