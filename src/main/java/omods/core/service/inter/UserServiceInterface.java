@@ -15,5 +15,5 @@ public interface UserServiceInterface {
 
     ResponseEntity<String> forgetPassword(String email);
 
-    /*ResponseEntity<List<UserDetails>> getUsersProfile();*/
+    ResponseEntity<List<UserDetails>> getUsersProfile();
 }

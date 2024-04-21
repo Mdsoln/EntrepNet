@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -120,13 +121,24 @@ public class UserService implements UserServiceInterface {
 
     }
 
- /*   @Override
+    @Override
     public ResponseEntity<List<UserDetails>> getUsersProfile() {
         try {
-            List<User> = userRepository.findUserProfile();
+            List<User> users = userRepository.findUserProfile();
 
+            List<UserDetails> userDetailsList = users.stream()
+                    .map(user -> new UserDetails(
+                            user.getProfile() != null ? user.getProfile().getJob() : null,
+                            /*user.getProfile() != null ? user.getProfile().getImageUrl() : null,*/
+                            user.getName(),
+                            user.getRoles().toString()))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(userDetailsList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }*/
+    }
 
     private static User getNewUser(UserDto userDto) {
         User newUser = new User();
@@ -134,13 +146,6 @@ public class UserService implements UserServiceInterface {
         newUser.setEmail(userDto.getEmail());
         newUser.setPsw(userDto.getPsw());
         newUser.setMobile(userDto.getMobile());
-        /*if (userDto.getRole().equalsIgnoreCase("MENTOR")){
-            newUser.setRoles(Roles.MENTOR);
-        } else if (userDto.getRole().equalsIgnoreCase("ENTREPRENEUR")) {
-            newUser.setRoles(Roles.ENTREPRENEUR);
-        }else {
-            newUser.setRoles(Roles.ADMIN);
-        }*/
         return newUser;
     }
 

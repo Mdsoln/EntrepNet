@@ -34,8 +34,8 @@ public class UserController {
 
     //query name, Job, role, image
 
-   /* @GetMapping("/user-details")
+    @GetMapping("/user-details")
     public ResponseEntity<List<UserDetails>> getUserProfile(){
         return userService.getUsersProfile();
-    }*/
+    }
 }
