@@ -21,7 +21,7 @@ public class PostCreationController {
            @RequestParam(name = "postContent", required = false) String postContent,
            @RequestParam(name = "postedFrom", required = false) String postedFrom,
            @RequestParam(name = "imagePath", required = false) MultipartFile imagePath
-           ){
+           ){//list of images or one image
       return postService.createPost(postContent, postedFrom, imagePath);
    }
 
