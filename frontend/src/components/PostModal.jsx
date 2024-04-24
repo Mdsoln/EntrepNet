@@ -1,4 +1,6 @@
-"use client";
+"use client"
+import axios from "axios"
+import { useState } from "react";
 import { ImLocation } from "react-icons/im";
 import { Button } from "@/components/ui/button";
 import { BiSolidImageAlt } from "react-icons/bi";
@@ -6,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -17,44 +18,62 @@ import { Input } from "@/components/ui/input";
 import { Pencil } from "lucide-react";
 import { GoPaperAirplane } from "react-icons/go";
 import { Separator } from "./ui/separator";
-import { useState } from "react";
+import { toast } from "sonner";
 
 export default function PostModal() {
-  const [file, setFile] = useState(null);
+  const [files, setFile] = useState(null);
   const [formData, setFormData] = useState({
     post: "",
-    ImageUrl: "" | null,
+    files: null,
   });
 
-  
   const handleChange = (event) => {
-    const { name, value, files } = event.target;
-  if (name === "Image" && files.length > 0) {
-    setFile(files[0]);
-  } else {
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
-  }
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
   };
 
-  const handleSubmit = (event) => {
-
-    event.preventDefault();
-    if (file) {
-      console.log("Uploading file...");
-  
-      const formData = new FormData();''
-      formData.append("Image", file);
-  
-
-    } else {
-      alert("Please select a file.");
+  const handleUpload = (event) => {
+    const selectedFile = event.target.files;
+    if (selectedFile) {
+      setFile(selectedFile);
     }
   };
-  
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const postData = new FormData();
+    postData.append("post", formData.post);
+
+    
+    if (files) {
+      if(files.length>3){
+
+        alert("you have reached a maximum number of pictures to submit")
+        return;
+      }
+      for (let index = 0; index <files.length; index++) {
+        postData.append(`file${index+1}`,files[index]);    
+      }
+      
+    }
+
+    try {
+      // Send postData to server using fetch or any other method
+      axios.post('localhost:8080/api/v1/post',postData)
+      toast.success("u have successful created a post!")
+    } catch (error) {
+      console.error("Error posting data:", error);
+      toast.error(error)
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="text-white flex gap-x-4">
+        <div className="text-white flex gap-x-4  hover:rounded-lg hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease">
           <Pencil />
           <div>Create post</div>
         </div>
@@ -64,9 +83,8 @@ export default function PostModal() {
           <DialogTitle className="text-white font-medium text-center">
             Create new post
           </DialogTitle>
-          <DialogDescription></DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <Textarea
             name="post"
             id="post"
@@ -87,11 +105,12 @@ export default function PostModal() {
                       <div className="text-xm text-white">Add photo</div>
                     </div>
                     <Input
-                      id="Image"
-                      name="Image"
+                      id="files"
+                      name="files"
                       type="file"
                       className="hidden"
-                      onChange={handleChange}
+                      onChange={handleUpload}
+                      multiple
                     />
                   </Label>
                 </div>

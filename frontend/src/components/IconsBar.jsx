@@ -7,14 +7,7 @@ export default function IconsBar() {
       name:"google",
       src:"./Google.svg"
     },
-    {
-      name:"Apple",
-      src:"./Apple.svg"
-    },
-    {
-      name:"Facebook",
-      src:"./Facebook.svg"
-    },
+   
   ]
   return (
     <div className="flex flex-col gap-y-2">
