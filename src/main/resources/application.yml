@@ -19,3 +19,5 @@ server:
 logging:
   level:
     org.springframework.security: DEBUG
+clickSend-username: mnyamaki698@gmail.com
+clickSend-apiKey: 1E721529-C901-DA68-020E-F657C42D7388
