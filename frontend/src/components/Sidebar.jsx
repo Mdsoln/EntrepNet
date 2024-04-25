@@ -8,8 +8,15 @@ import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { Settings,LogOut,Pencil, Mails, CircleHelp} from 'lucide-react';
 import PostModal from './PostModal'
 import Link from 'next/link';
+import {useAuth} from "@/hooks/use-auth";
 
 export default function Sidebar() {
+    const { signOut } = useAuth();
+
+    const handleSignOut = async () => {
+        await signOut();
+        // Optionally, you can perform additional actions after signing out
+    };
   return (
     <div className='flex flex-col gap-y-12 w-48 mx-0 bg-[#15264B] h-full'>
         <Header fontSize={"text-lg"}/>
@@ -28,7 +35,7 @@ export default function Sidebar() {
              <div className="text-white flex gap-x-4">
               <BiHelpCircle  className='text-2xl font-extrabold  hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease'/><div>Help</div>
             </div>
-             <div className='text-white flex gap-x-4  hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease'> <LogOut /><div>logout</div></div>        
+             <div className='text-white flex gap-x-4  hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease' onClick={handleSignOut}> <LogOut/><div>logout</div></div>
         </div>
        
     </div>
