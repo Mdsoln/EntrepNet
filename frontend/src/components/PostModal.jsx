@@ -88,7 +88,7 @@ export default function PostModal() {
             Create new post
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <form onSubmit={handleSubmit} encType="multipart/form-data" method="post">
           <Textarea
             name="post"
             id="post"
