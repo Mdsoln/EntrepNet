@@ -1,4 +1,4 @@
-import { router } from "@/trpc/trpc"
+
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
@@ -6,7 +6,7 @@ export const  useAuth =()=>{
     const router = useRouter()
    const signOut = async ()=>{
     try {
-        const res = await fetch(`localhost:8080/api/users/logout`,
+        const res = await fetch(`http://localhost:8080/api/v1/users/logout`,
         {
             method:"POST",
             credentials:"include",
