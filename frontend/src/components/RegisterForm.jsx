@@ -11,7 +11,7 @@ import axios from "axios";
 import { toast } from "sonner";
 
 
-export default function RegisterForm({ onNext }) {
+export default function RegisterForm({ onNext,data}) {
 
   const router = useRouter()
     {/** form validation */}
@@ -39,15 +39,16 @@ export default function RegisterForm({ onNext }) {
     onSubmit: async (values) => {
      
       try { 
-          const { confirmpassword, ...formData } = values;
-          let res = await axios.post('localhost:8080/api/v1/user/register', formData)
+          const { confirmpassword, ...data } = values;
+
+         let res = await axios.post('localhost:8080/api/v1/user/register', data)
            
-         if(res.status==400){
-            toast.error("the email is already taken")
+          if(res.status==400){
+           toast.error("the email is already taken")
           }else if(res.status==500){
-          toast.error("something went wrong please try again letter")
+         toast.error("something went wrong please try again letter")
          }
-          onNext(formData) 
+          onNext(data)
       } catch (error) {
         alert(`the was an ${error} submitting the form`)
       }
