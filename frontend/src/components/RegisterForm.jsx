@@ -11,7 +11,7 @@ import axios from "axios";
 import { toast } from "sonner";
 
 
-export default function RegisterForm({ onNext,data}) {
+export default function RegisterForm({ onNext}) {
 
   const router = useRouter()
     {/** form validation */}
