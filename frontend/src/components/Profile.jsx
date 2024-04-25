@@ -12,10 +12,17 @@ import Image from 'next/image';
 import { Pencil } from 'lucide-react';
 import { Separator } from './ui/separator';
 import axios from 'axios';
+import {toast} from "sonner";
 export default async function Profile() {
+    try {
+        const user = await axios.get('http://localhost:8080/api/v1/user/')
+        console.log(user);
+    }catch (err){
+        toast.error("something went wrong fetching ur profile")
 
-  const User = axios.get('')
-  return (
+        console.log(err)
+    }
+    return (
     <Sheet>
     <SheetTrigger>
     <Avatar>
@@ -43,10 +50,10 @@ export default async function Profile() {
          </SheetHeader>
 
          <div className='text-white flex flex-col gap-y-8'>
-              <div className='grid grid-cols-2'><span>Name:</span><span>Periset Niamh</span></div>
-              <div className='grid grid-cols-2'><span>Phone:</span><span>+255 765 456 890</span></div>
-              <div className='grid grid-cols-2'><span>Email:</span>peri.niamh@hotmail.com<span></span></div>
-              <div className='grid grid-cols-2'><span>Job:</span><span>Makeup artist</span></div>
+              <div className='grid grid-cols-2'><span>Name:</span><span>{user.name}</span></div>
+              <div className='grid grid-cols-2'><span>Phone:</span><span>{user.phone}</span></div>
+              <div className='grid grid-cols-2'><span>Email:</span>{user.email}<span></span></div>
+              <div className='grid grid-cols-2'><span>Job:</span><span>{user.job}</span></div>
              
          </div>
          <Separator orientation="horizontal" className="w-full mt-8"/>
