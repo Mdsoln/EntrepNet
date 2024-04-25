@@ -23,7 +23,7 @@ export default function ProfileForm({ formData }) {
             location: Yup.string().required("This field is required"),
             role: Yup.string().required("This field is required"),
             image: Yup.mixed()
-                .required("Please upload your profile")
+              .required("Please upload your profile")
         }),
         onSubmit: async (values) => {
             values["email"] = email
@@ -62,9 +62,9 @@ export default function ProfileForm({ formData }) {
                 style="text-center mt-8 mb-12"
             />
             <form
+                method="post"
                 onSubmit={formik.handleSubmit}
                 className="flex flex-col gap-y-12"
-                encType="multipart/form-data"
             >
                 <div className="flex gap-x-2">
                     <div className="grid grid-cols-1">
