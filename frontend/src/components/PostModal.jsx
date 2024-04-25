@@ -19,8 +19,10 @@ import { Pencil } from "lucide-react";
 import { GoPaperAirplane } from "react-icons/go";
 import { Separator } from "./ui/separator";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function PostModal() {
+  const router = useRouter()
   const [files, setFile] = useState(null);
   const [formData, setFormData] = useState({
     post: "",
@@ -64,6 +66,8 @@ export default function PostModal() {
       // Send postData to server using fetch or any other method
       axios.post('localhost:8080/api/v1/post',postData)
       toast.success("u have successful created a post!")
+      router.refresh()
+      
     } catch (error) {
       console.error("Error posting data:", error);
       toast.error(error)

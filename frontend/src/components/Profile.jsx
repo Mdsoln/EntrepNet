@@ -11,7 +11,10 @@ import {
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
 import { Separator } from './ui/separator';
-export default function Profile() {
+import axios from 'axios';
+export default async function Profile() {
+
+  const User = axios.get('')
   return (
     <Sheet>
     <SheetTrigger>

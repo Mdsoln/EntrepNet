@@ -29,7 +29,7 @@ export default function ProfileForm( {formData}) {
         
        
 
-      let res = await axios.post('localhost:8080/api/vi/user//complete-profile',values)
+      let res = await axios.post('localhost:8080/api/v1/user/complete-profile',values)
 
       if(res.status === 200){
         toast.success("congratulations!! your profile is complete!!")
