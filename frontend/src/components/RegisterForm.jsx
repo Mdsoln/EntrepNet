@@ -41,7 +41,14 @@ export default function RegisterForm({ onNext}) {
       try { 
           const { confirmpassword, ...data } = values;
 
-         let res = await axios.post('http://localhost:8080/api/v1/user/register', data)
+        let res = await axios.post(
+            'http://localhost:8080/api/v1/user/register',
+            data,{
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+            )
            
           if(res.status==400){
            toast.error("the email is already taken")
