@@ -64,7 +64,11 @@ export default function PostModal() {
 
     try {
       // Send postData to server using fetch or any other method
-      axios.post('http://localhost:8080/api/v1/post',postData)
+      axios.post('http://localhost:8080/api/v1/post',postData,{
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
       toast.success("u have successful created a post!")
       router.refresh()
       
