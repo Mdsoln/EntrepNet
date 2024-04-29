@@ -7,6 +7,7 @@ import Button from "./Button";
 import FormHeader from "./FormHeader"
 import IconsBar from "./IconsBar"
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -21,9 +22,16 @@ export default function SignUpForm() {
         .required("required"),
       email: Yup.string().email("Invalid email address").required("required"),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      router.push("/home")
+    onSubmit: async (values) => {
+     try {
+         let res = await axios.post("http://localhost:8080/api/v1/user/login", values)
+         if(res.status === 200)
+         {
+             router.push('/home')
+         }
+     }catch (e) {
+
+     }
     },
   });
   return (
