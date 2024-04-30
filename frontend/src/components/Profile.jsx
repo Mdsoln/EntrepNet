@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     Sheet,
     SheetContent,
@@ -14,10 +14,12 @@ import { Separator } from './ui/separator';
 import axios from 'axios';
 import {toast} from "sonner";
 export default function Profile() {
-
+    const [data, setData] = useState({});
         useEffect(async () => {
             try {
-                const user = await axios.get('http://localhost:8080/api/v1/user/')
+                let response;
+                ({data: response} = await axios.get('http://localhost:8080/api/v1/user/'));
+                setData(response)
             }catch (err){
                 toast.error("something went wrong fetching ur profile")
 
@@ -54,10 +56,10 @@ export default function Profile() {
          </SheetHeader>
 
          <div className='text-white flex flex-col gap-y-8'>
-              <div className='grid grid-cols-2'><span>Name:</span><span>{user.name}</span></div>
-              <div className='grid grid-cols-2'><span>Phone:</span><span>{user.phone}</span></div>
-              <div className='grid grid-cols-2'><span>Email:</span>{user.email}<span></span></div>
-              <div className='grid grid-cols-2'><span>Job:</span><span>{user.job}</span></div>
+              <div className='grid grid-cols-2'><span>Name:</span><span>{data.name}</span></div>
+              <div className='grid grid-cols-2'><span>Phone:</span><span>{data.phone}</span></div>
+              <div className='grid grid-cols-2'><span>Email:</span>{data.email}<span></span></div>
+              <div className='grid grid-cols-2'><span>Job:</span><span>{data.job}</span></div>
              
          </div>
          <Separator orientation="horizontal" className="w-full mt-8"/>
