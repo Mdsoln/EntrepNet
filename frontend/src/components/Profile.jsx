@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Sheet,
     SheetContent,
@@ -13,15 +13,19 @@ import { Pencil } from 'lucide-react';
 import { Separator } from './ui/separator';
 import axios from 'axios';
 import {toast} from "sonner";
-export default async function Profile() {
-    try {
-        const user = await axios.get('http://localhost:8080/api/v1/user/')
-        console.log(user);
-    }catch (err){
-        toast.error("something went wrong fetching ur profile")
+export default function Profile() {
 
-        console.log(err)
-    }
+        useEffect(async () => {
+            try {
+                const user = await axios.get('http://localhost:8080/api/v1/user/')
+            }catch (err){
+                toast.error("something went wrong fetching ur profile")
+
+                console.log(err)
+            }
+
+        }, []);
+
     return (
     <Sheet>
     <SheetTrigger>
