@@ -29,7 +29,10 @@ public class Profile {
     private User user;
 
     private String job;
+
     @Column(name = "locatedAt", nullable = false)
     private String locatedAt;
-    private String topic;
+
+    @Column(name = "images", nullable = false)
+    private String imagePath;
 }
