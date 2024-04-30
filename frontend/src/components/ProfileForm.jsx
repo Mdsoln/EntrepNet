@@ -35,7 +35,6 @@ export default function ProfileForm({ formData }) {
                 formData.append("image", values.image);
                 formData.append("email", email);
 
-                console.log(formData);
                  let res = await axios.post('http://localhost:8080/api/v1/user/complete-profile', values,{
                      headers:{
                          "Content-Type":"multipart/form-data"
