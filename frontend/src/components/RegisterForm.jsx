@@ -49,10 +49,9 @@ export default function RegisterForm({ onNext}) {
               }
             }
             )
-           
-          if(res.status==400){
-           toast.error("the email is already taken")
-          }else if(res.status==500){
+
+          if( res.status===400){
+           toast.error("the email is already taken") }else if(res.status ===500){
          toast.error("something went wrong please try again letter")
          }
           onNext(data)
