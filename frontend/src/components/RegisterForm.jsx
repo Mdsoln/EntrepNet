@@ -7,8 +7,11 @@ import Button from "./Button";
 import FormHeader from "./FormHeader";
 import IconsBar from "./IconsBar";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "sonner";
 
-export default function RegisterForm() {
+
+export default function RegisterForm({ onNext}) {
 
   const router = useRouter()
     {/** form validation */}
@@ -16,16 +19,16 @@ export default function RegisterForm() {
     initialValues: {
       firstname: "",
       surname: "",
-      phone: "",
-      password: "",
+      mobile: "",
+      psw: "",
       confirmpassword: "",
       email: "",
     },
     validationSchema: Yup.object({
       firstname: Yup.string().required("This field is required"),
       surname: Yup.string().required("This field is required"),
-      phone: Yup.string().min(9,"invalid phone number").required("This field is required"),
-      password: Yup.string()
+      mobile: Yup.string().min(9,"invalid mobile number").required("This field is required"),
+      psw: Yup.string()
         .min(8, "password should have atleast 8 characters")
         .required("This field is required"),
       confirmpassword: Yup.string()
@@ -33,13 +36,25 @@ export default function RegisterForm() {
         .required("This field is required").oneOf([Yup.ref('password'), null], 'Passwords must match'),
       email: Yup.string().email("Invalid email address").required("This field is required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
      
       try { 
-          const { confirmpassword, ...formData } = values;
-          alert(JSON.stringify(formData, null, 2));
-          router.push("/profile")
-       
+          const { confirmpassword, ...data } = values;
+
+        let res = await axios.post(
+            'http://localhost:8080/api/v1/user/register',
+            data,{
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+            )
+
+          if( res.status===400){
+           toast.error("the email is already taken") }else if(res.status ===500){
+         toast.error("something went wrong please try again letter")
+         }
+          onNext(data)
       } catch (error) {
         alert(`the was an ${error} submitting the form`)
       }
@@ -51,8 +66,9 @@ export default function RegisterForm() {
     <>
       <div>
         <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-y-12 items-center justify-center"
+            method="post"
+            onSubmit={formik.handleSubmit}
+            className="flex flex-col gap-y-12 items-center justify-center"
         >
           <FormHeader className="mt-12" text={"Sign in to continue"} />
             <div className="grid grid-cols-2 gap-y-12 gap-x-4">
@@ -110,37 +126,37 @@ export default function RegisterForm() {
           </div>
           <div>
             <Input
-              id="phone"
-              name="phone"
+              id="moblie"
+              name="mobile"
               type="number"
-              placeholder="phone"
+              placeholder="mobile"
               className="w-48"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.phone}
+              value={formik.values.mobile}
             />
-            {formik.touched.phone && formik.errors.phone ? (
+            {formik.touched.mobile && formik.errors.mobile ? (
               <span className="text-sm font-light text-red-500">
-                {formik.errors.phone}
+                {formik.errors.mobile}
               </span>
             ) : null}
           </div>
 
           <div>
             <Input
-              id="password"
-              name="password"
+              id="psw"
+              name="psw"
               type="password"
-              placeholder="password"
+              placeholder="psw"
               className="w-48"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.password}
+              value={formik.values.psw}
             />
             <div className="flex gap-x-4">
-              {formik.touched.password && formik.errors.password ? (
+              {formik.touched.psw && formik.errors.psw ? (
                 <span className="text-sm font-light text-red-600">
-                  {formik.errors.password}
+                  {formik.errors.psw}
                 </span>
               ) : null}
             </div>
