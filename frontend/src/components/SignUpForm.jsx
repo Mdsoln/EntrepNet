@@ -8,6 +8,7 @@ import FormHeader from "./FormHeader"
 import IconsBar from "./IconsBar"
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -27,10 +28,13 @@ export default function SignUpForm() {
          let res = await axios.post("http://localhost:8080/api/v1/user/login", values)
          if(res.status === 200)
          {
+             const token = res.data.token;
+             localStorage.setItem('jwtToken', token);
              router.push('/home')
          }
      }catch (e) {
-
+        alert("something went wrong please try again later")
+        console.error(e)
      }
     },
   });

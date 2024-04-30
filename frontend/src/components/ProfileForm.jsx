@@ -42,6 +42,9 @@ export default function ProfileForm({ formData }) {
                  })
 
                 if(res.status === 200){
+                    
+                const token = res.data.token;
+                localStorage.setItem('jwtToken', token);
                 toast.success("Congratulations!! Your profile is complete!!")
                  }else{
                  toast.error("We've encountered an error, please try again later")
