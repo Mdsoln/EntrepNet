@@ -3,11 +3,13 @@ package omods.core.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import omods.core.constants.Roles;
-import omods.core.dto.ProfileDetails;
+import omods.core.dto.AuthRequest;
+import omods.core.dto.AuthResponse;
 import omods.core.dto.UserDetails;
 import omods.core.dto.UserDto;
 import omods.core.exc.EmailExistException;
 import omods.core.exc.ExceptionHandlerManager;
+import omods.core.jwt.service.JwtService;
 import omods.core.repo.ProfileRepo;
 import omods.core.repo.UserRepository;
 import omods.core.service.inter.UserServiceInterface;
@@ -16,9 +18,20 @@ import omods.core.users.Profile;
 import omods.core.users.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -30,6 +43,8 @@ public class UserService implements UserServiceInterface {
     private final UserRepository userRepository;
     private final ProfileRepo profileRepo;
     private final NotificationServiceImpl notification;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public ResponseEntity<String> registerNewUser(UserDto userDto) {
@@ -53,49 +68,6 @@ public class UserService implements UserServiceInterface {
         }
     }
 
-    @Override
-    public ResponseEntity<String> completeProfile(ProfileDetails profileDetails) {
-        try {
-            User creator = userRepository.findByEmail(profileDetails.getEmail());
-            if (creator == null){
-                throw new ExceptionHandlerManager("User not found with email: "+ profileDetails.getEmail());
-            }
-
-            if (profileDetails.getUserClaims().isEmpty()) {
-                throw new ExceptionHandlerManager("Missing user claims in profile details");
-            }
-
-            String userRole = profileDetails.getUserClaims().getFirst().getRole();
-            String topic = profileDetails.getUserClaims().getFirst().getTopic();
-
-            if (userRole.equalsIgnoreCase("MENTOR")){
-                creator.setRoles(Roles.MENTOR);
-            } else if (userRole.equalsIgnoreCase("ENTREPRENEUR")) {
-                creator.setRoles(Roles.ENTREPRENEUR);
-            } else {
-                creator.setRoles(Roles.ADMIN);
-            }
-
-            userRepository.save(creator);
-
-            Profile profile = Profile
-                    .builder()
-                    .job(profileDetails.getJob())
-                    .topic(topic)
-                    .locatedAt(profileDetails.getLocatedAt())
-                    .user(creator)
-                    .build();
-            profileRepo.save(profile);
-
-            return ResponseEntity.ok("Profile completed successfully");
-
-        }catch (ExceptionHandlerManager handlerManager){
-            throw new ExceptionHandlerManager("Error: "+handlerManager.getMessage());
-        }catch (Exception e) {
-            log.info("Error completing profile: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-        }
-    }
 
     @Override
     public ResponseEntity<String> forgetPassword(String email) {
@@ -121,6 +93,7 @@ public class UserService implements UserServiceInterface {
 
     }
 
+
     @Override
     public ResponseEntity<List<UserDetails>> getUsersProfile() {
         try {
@@ -137,6 +110,63 @@ public class UserService implements UserServiceInterface {
             return ResponseEntity.ok(userDetailsList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @Override
+    public ResponseEntity<AuthResponse> completeProfile(String email, String job, String locatedAt, String role, MultipartFile imagePath) {
+        try {
+            User creator = userRepository.findByEmail(email);
+            if (creator == null){
+                throw new ExceptionHandlerManager("Oops! email not matches with any user");
+            }
+
+            if (role.equalsIgnoreCase("MENTOR")){
+                creator.setRoles(Roles.MENTOR);
+            } else if (role.equalsIgnoreCase("ENTREPRENEUR")) {
+                creator.setRoles(Roles.ENTREPRENEUR);
+            }
+
+            userRepository.save(creator);
+
+            Profile profile = Profile
+                    .builder()
+                    .job(job)
+                    .imagePath(storeImages(imagePath))
+                    .locatedAt(locatedAt)
+                    .user(creator)
+                    .build();
+            profileRepo.save(profile);
+
+            var token = jwtService.generateToken(creator);
+            return ResponseEntity.ok(AuthResponse.builder().token(token).build());
+
+        }catch (ExceptionHandlerManager exceptions){
+            AuthResponse authResponse = new AuthResponse(exceptions.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authResponse);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authRequest.getEmail(),
+                            authRequest.getPassword()
+                    )
+            );
+
+            var user = userRepository.findByEmail(authRequest.getEmail());
+            var token = jwtService.generateToken(user);
+            return ResponseEntity.ok(AuthResponse.builder().token(token).build());
+
+        }catch (AuthenticationException handleExceptions){
+            AuthResponse error = AuthResponse.builder().token("Error: "+handleExceptions.getMessage()).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
     }
 
@@ -159,5 +189,28 @@ public class UserService implements UserServiceInterface {
             builder.append(digit);
         }
         return builder.toString();
+    }
+
+    public String storeImages(MultipartFile imageUrl) throws IOException {
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            throw new IllegalArgumentException("Image file is null or empty");
+        }
+
+        String uploadDirectory = "static/images";
+        String imageName = StringUtils.cleanPath(Objects.requireNonNull(imageUrl.getOriginalFilename()));
+
+        if (imageName.contains("..")) {
+            throw new IllegalArgumentException("Invalid file format");
+        }
+
+        Path uploadPath = Paths.get(uploadDirectory);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        Path filePath = uploadPath.resolve(imageName);
+        Files.copy(imageUrl.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return imageName;
     }
 }

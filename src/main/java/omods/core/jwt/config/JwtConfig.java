@@ -1,4 +1,4 @@
-package omods.core.jwt;
+package omods.core.jwt.config;
 
 
 import lombok.RequiredArgsConstructor;
