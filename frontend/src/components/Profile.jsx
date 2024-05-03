@@ -15,19 +15,18 @@ import axios from 'axios';
 import { toast } from "sonner";
 export default function Profile() {
     const [data, setData] = useState({});
-    useEffect(async () => {
-
+    useEffect(() => {
         try {
-            const token = localStorage.getItem('jwtToken');
-            let response;
-            ({ data: response } = await axios.get('http://localhost:8080/api/v1/user/'
-                , {
+
+            async function fetchData(){
+                ({data: response} = await axios.get('http://localhost:8080/api/v1/user/', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
-                }
-            ));
-            setData(response)
+                }));
+                setData(response)
+            }
+
         } catch (err) {
             toast.error("something went wrong fetching ur profile")
 
