@@ -24,12 +24,10 @@ public class Security {
                 disable()
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/api/v1/post/**","/images/{imageName}")
-                                .permitAll()
-                                .requestMatchers("/api/v1/user/**")
+                                .requestMatchers("/api/v1/post/**","/api/v1/user/**","/images/{imageName}")
                                 .permitAll()
                                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/entrepreneur").hasAnyRole("ENTREPRENEUR","ADMIN")
+                                .requestMatchers("/api/v1/entrepreneur/**").hasAnyRole("ENTREPRENEUR","ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).sessionManagement(
