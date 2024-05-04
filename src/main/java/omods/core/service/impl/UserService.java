@@ -3,10 +3,7 @@ package omods.core.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import omods.core.constants.Roles;
-import omods.core.dto.AuthRequest;
-import omods.core.dto.AuthResponse;
-import omods.core.dto.UserDetails;
-import omods.core.dto.UserDto;
+import omods.core.dto.*;
 import omods.core.exc.EmailExistException;
 import omods.core.exc.ExceptionHandlerManager;
 import omods.core.jwt.service.JwtService;
@@ -102,7 +99,7 @@ public class UserService implements UserServiceInterface {
             List<UserDetails> userDetailsList = users.stream()
                     .map(user -> new UserDetails(
                             user.getProfile() != null ? user.getProfile().getJob() : null,
-                            /*user.getProfile() != null ? user.getProfile().getImageUrl() : null,*/
+                            user.getProfile() != null ? user.getProfile().getImagePath() : null,
                             user.getName(),
                             user.getRoles().toString()))
                     .collect(Collectors.toList());
@@ -168,6 +165,19 @@ public class UserService implements UserServiceInterface {
             AuthResponse error = AuthResponse.builder().token("Error: "+handleExceptions.getMessage()).build();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
+    }
+
+    @Override
+    public ResponseEntity<Object> findUser(Long userId) {
+       UserResponse response = userRepository.findByUserId(userId);
+        if (response == null){
+            throw new ExceptionHandlerManager("User not found!");
+        }
+
+        String uploadDirectory = "static/images/";
+        response.setImagePath(uploadDirectory+response.getImagePath());
+
+        return ResponseEntity.ok(response);
     }
 
     private static User getNewUser(UserDto userDto) {

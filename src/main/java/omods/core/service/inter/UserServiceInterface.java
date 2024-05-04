@@ -20,4 +20,7 @@ public interface UserServiceInterface {
     ResponseEntity<AuthResponse> completeProfile(String email, String job, String locatedAt, String role, MultipartFile imagePath);
 
     ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest);
+
+    ResponseEntity<Object> findUser(Long userId);
+
 }

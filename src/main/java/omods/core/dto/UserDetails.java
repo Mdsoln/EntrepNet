@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDetails {
     private String userJob;
-    /*private String imageUrl;*/
+    private String imageUrl;
     private String username;
     private String userRole;
 }

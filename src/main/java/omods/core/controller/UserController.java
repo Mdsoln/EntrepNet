@@ -48,10 +48,14 @@ public class UserController {
         return userService.authenticate(authRequest);
     }
 
-    //todo query name, Job, role, image
 
     @GetMapping("/user-details")
     public ResponseEntity<List<UserDetails>> getUserProfile(){
         return userService.getUsersProfile();
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<Object> getUser(@PathVariable("userId") Long userId){
+        return userService.findUser(userId);
     }
 }
