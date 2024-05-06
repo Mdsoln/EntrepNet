@@ -217,7 +217,7 @@ public class UserService implements UserServiceInterface {
             throw new IllegalArgumentException("Image file is null or empty");
         }
 
-        String uploadDirectory = "static/images";
+        String uploadDirectory = "src/main/resources/static/images";
         String imageName = StringUtils.cleanPath(Objects.requireNonNull(imageUrl.getOriginalFilename()));
 
         if (imageName.contains("..")) {
