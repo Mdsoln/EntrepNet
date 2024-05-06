@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +43,7 @@ public class UserService implements UserServiceInterface {
     private final NotificationServiceImpl notification;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public ResponseEntity<String> registerNewUser(UserDto userDto) {
@@ -51,7 +53,13 @@ public class UserService implements UserServiceInterface {
                 throw new EmailExistException("Already exists user with same email!");
             }
 
-            User newUser = getNewUser(userDto);
+            User newUser = new User();
+            newUser.setName(userDto.getFirstname() + " " + userDto.getSurname());
+            newUser.setRegNo(uniqueUserId());
+            newUser.setEmail(userDto.getEmail());
+            newUser.setPsw(passwordEncoder.encode(userDto.getPsw()));
+            newUser.setMobile(userDto.getMobile());
+
             userRepository.save(newUser);
             return ResponseEntity.ok("Email: " + userDto.getEmail());
 
@@ -168,7 +176,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public ResponseEntity<Object> findUser(Long userId) {
+    public ResponseEntity<Object> findUser(String userId) {
        UserResponse response = userRepository.findByUserId(userId);
         if (response == null){
             throw new ExceptionHandlerManager("User not found!");
@@ -180,13 +188,16 @@ public class UserService implements UserServiceInterface {
         return ResponseEntity.ok(response);
     }
 
-    private static User getNewUser(UserDto userDto) {
-        User newUser = new User();
-        newUser.setName(userDto.getFirstname() + " " + userDto.getSurname());
-        newUser.setEmail(userDto.getEmail());
-        newUser.setPsw(userDto.getPsw());
-        newUser.setMobile(userDto.getMobile());
-        return newUser;
+    private static String uniqueUserId() {
+        int registrationUnitLength = 5;
+        StringBuilder builder = new StringBuilder();
+
+        Random random = new Random();
+        for (int i=0; i < registrationUnitLength; i++){
+            int digit = random.nextInt(10);
+            builder.append(digit);
+        }
+        return "EN-"+builder;
     }
 
     private String generateRandomPassword(){

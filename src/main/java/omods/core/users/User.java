@@ -35,6 +35,9 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
     private Profile profile;
 
+    @Column(name = "reg_no",nullable = false)
+    private String regNo;
+
     private String name;
     private String email;
     private String mobile;

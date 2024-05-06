@@ -19,6 +19,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
      @Query("SELECT NEW omods.core.dto.UserResponse(u.name, u.email, u.roles, p.imagePath) " +
              "FROM User u " +
              "JOIN u.profile p " +
-             "WHERE u.userID = :queryId ")
-     UserResponse findByUserId(@Param("queryId") Long userId);
+             "WHERE u.regNo = :queryId ")
+     UserResponse findByUserId(@Param("queryId") String userId);
 }

@@ -21,6 +21,6 @@ public interface UserServiceInterface {
 
     ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest);
 
-    ResponseEntity<Object> findUser(Long userId);
+    ResponseEntity<Object> findUser(String userId);
 
 }
