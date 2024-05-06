@@ -1,6 +1,6 @@
 package omods.core.repo;
 
-import omods.core.users.Post;
+import omods.core.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,6 @@
 package omods.core.service.inter;
 
-import omods.core.dto.PostData;
-import omods.core.users.Post;
+import omods.core.entity.Post;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 

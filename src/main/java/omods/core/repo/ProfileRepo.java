@@ -1,6 +1,6 @@
 package omods.core.repo;
 
-import omods.core.users.Profile;
+import omods.core.entity.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

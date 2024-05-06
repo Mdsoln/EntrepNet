@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import omods.core.exc.ExceptionHandlerManager;
 import omods.core.repo.PostRepo;
 import omods.core.service.inter.PostService;
-import omods.core.users.Post;
+import omods.core.entity.Post;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

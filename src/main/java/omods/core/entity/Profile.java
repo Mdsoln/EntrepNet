@@ -1,4 +1,4 @@
-package omods.core.users;
+package omods.core.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

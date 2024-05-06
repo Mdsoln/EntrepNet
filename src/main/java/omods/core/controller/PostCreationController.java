@@ -3,7 +3,7 @@ package omods.core.controller;
 
 import lombok.RequiredArgsConstructor;
 import omods.core.service.impl.PostServiceImpl;
-import omods.core.users.Post;
+import omods.core.entity.Post;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
