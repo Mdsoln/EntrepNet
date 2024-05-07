@@ -24,8 +24,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
              "WHERE u.regNo = :queryId ")
      UserResponse findByUserId(@Param("queryId") String userId);
 
-     Optional<User> findByRegNo(String userRegNo);
+     /*Optional<User> findByRegNo(String userRegNo);*/
 
      List<User> findByStatus(Status status);
+
+     User findByRegNo(String regNo);
 
 }

@@ -3,6 +3,7 @@ package omods.core.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import omods.core.constants.Roles;
+import omods.core.constants.Status;
 import omods.core.dto.*;
 import omods.core.exc.EmailExistException;
 import omods.core.exc.ExceptionHandlerManager;
@@ -11,8 +12,8 @@ import omods.core.repo.ProfileRepo;
 import omods.core.repo.UserRepository;
 import omods.core.service.inter.UserServiceInterface;
 import omods.core.service.notify.impl.NotificationServiceImpl;
-import omods.core.users.Profile;
-import omods.core.users.User;
+import omods.core.entity.Profile;
+import omods.core.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,6 +60,7 @@ public class UserService implements UserServiceInterface {
             newUser.setEmail(userDto.getEmail());
             newUser.setPsw(passwordEncoder.encode(userDto.getPsw()));
             newUser.setMobile(userDto.getMobile());
+            newUser.setStatus(Status.ONLINE);
 
             userRepository.save(newUser);
             return ResponseEntity.ok("Email: " + userDto.getEmail());
