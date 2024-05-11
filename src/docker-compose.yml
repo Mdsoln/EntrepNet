@@ -1,38 +1,36 @@
-# Define services
+version: '3.8'
+
 services:
   # PostgreSQL database service
   postgresql:
-    image: postgres
+    build:
+      context: .
+      dockerfile: Dockerfile.postgresql
     container_name: postgres_db
     # Map port 5432 of the container to port 5432 of the host machine
     ports:
-      - 5432:5432
+      - "5433:5432"
     # Create a volume named 'entrepnet' to store persistent database data
     volumes:
-      - entrepnet/data:/var/lib/postgresql/data
-    # Set environment variables for PostgreSQL initialization
-    environment:
-      - POSTGRESQL_INITDB_ROOT_USERNAME: postgres
-      - POSTGRESQL_INITDB_ROOT_PASSWORD: mdsoln
-  #custom PostgreSQL Express service
+      - entrepnet:/var/lib/postgresql/data
+
+  # Custom PostgreSQL Express service
   postgresql_express:
-    image: postgres-express  # custom image
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres-express
     container_name: postgres_express
     # Restart the container automatically if it crashes
     restart: always
     ports:
-      - 8081:8081
+      - "8081:8081"
     environment:
-      - PE_CONFIG_POSTGRESQL_HOST: postgresql
-      - PE_CONFIG_POSTGRESQL_PORT: 5432
-      ## postgresql express configuration
-      - PE_CONFIG_POSTGRESQL_USERNAME: postgres
-      - PE_CONFIG_POSTGRESQL_PASSWORD: mdsoln
-      - PE_CONFIG_POSTGRESQL_DATABASE: entrepnet
+      PE_CONFIG_POSTGRESQL_HOST: 'postgresql'
+      PE_CONFIG_POSTGRESQL_PORT: 5432
+      # PostgreSQL Express configuration
+      PE_CONFIG_POSTGRESQL_USERNAME: 'postgres'
+      PE_CONFIG_POSTGRESQL_PASSWORD: 'mdsoln'
+      PE_CONFIG_POSTGRESQL_DATABASE: 'entrepnet'
+
 volumes:
   entrepnet: {}
-
-#muddy@Mdsoln:~$ docker-compose ps
-#sudo snap install docker          # version 24.0.5, or
-#sudo apt  install docker-compose  # version 1.29.2-1
-#See 'snap info docker' for additional versions.
