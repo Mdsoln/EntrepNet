@@ -64,7 +64,7 @@ export default function PostModal() {
 
     try {
       // Send postData to server using fetch or any other method
-      axios.post('http://localhost:8080/api/v1/post',postData,{
+      axios.post('http://localhost:8080/api/v1/post',JSON.stringify(postData),{
         headers: {
           'Content-Type': 'multipart/form-data'
         }

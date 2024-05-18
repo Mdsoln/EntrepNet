@@ -44,10 +44,11 @@ export default function RegisterForm({ onNext }) {
 
        axios.post(
             "http://localhost:8080/api/v1/user/register",
-           data,
+           JSON.stringify(data),
             {
               headers: {
                 "Content-Type": "application/json",
+                "Accept":"*/*",
               },
             }
         ).then(

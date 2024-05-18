@@ -36,7 +36,7 @@ export default function ProfileForm({ formData }) {
                 formData.append("email", email);
 
                  let res = await axios.post(
-                    'http://localhost:8080/api/v1/user/complete-profile', values,{
+                    'http://localhost:8080/api/v1/user/complete-profile', JSON.stringify(values),{
                      headers:{
                          "Content-Type":"multipart/form-data"
                      }
@@ -68,6 +68,7 @@ export default function ProfileForm({ formData }) {
                 method="post"
                 onSubmit={formik.handleSubmit}
                 className="flex flex-col gap-y-12"
+                encType="multipart-formdata"
             >
                 <div className="flex gap-x-2">
                     <div className="grid grid-cols-1">
