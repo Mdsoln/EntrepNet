@@ -9,9 +9,13 @@ import IconsBar from "./IconsBar";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
+import {jwtDecode} from "jwt-decode";
+import {useAuthContext } from "@/context/AuthContext";
 
 export default function RegisterForm({ onNext }) {
   const router = useRouter();
+
+  const {auth,setAuth} = useAuthContext()
 
     {/** form validation */}
   const formik = useFormik({
@@ -38,30 +42,36 @@ export default function RegisterForm({ onNext }) {
       email: Yup.string().email("Invalid email address").required("This field is required"),
     }),
     onSubmit: async (values) => {
-        const { confirmpassword, ...data } = values;
-         alert(data)
-        console.log(data)
 
-       axios.post(
-            "http://localhost:8080/api/v1/user/register",
-           JSON.stringify(data),
-            {
-              headers: {
+      // destructure the confirmed password
+        const { confirmpassword, ...data } = values;
+
+        console.log(JSON.stringify(data))
+        axios.post(
+           "http://localhost:8080/api/v1/user/register",
+          JSON.stringify(data),
+           {
+             headers: {
                 "Content-Type": "application/json",
-                "Accept":"*/*",
-              },
-            }
-        ).then(
-           (response) =>  {
-             const token = response.data.token;
-             localStorage.setItem('jwtToken', token);
-             toast.success("Registration successful");
+             "Accept":"*/*",
+           },
+         }
+     ).then(
+          (response) =>  {
+            const token = response.data.token;
+            //store token and user details
+            localStorage.setItem('jwtToken', token);       
+            localStorage.setItem("user-details",JSON.stringify(data))
+
+            //set authenticated user for global state
+             setAuth(data)
+            toast.success("Let us complete your profile");
              onNext(data);
 
            }
-       ).catch ((error)=>{
-          alert(error)
-       })
+        ).catch ((error)=>{
+          console.log(error.message)
+     })
     },
   });
 
