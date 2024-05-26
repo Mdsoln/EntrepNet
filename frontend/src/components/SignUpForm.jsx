@@ -9,8 +9,11 @@ import IconsBar from "./IconsBar"
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
+import { jwtDecode } from "jwt-decode";
+import { useAuthContext } from "@/context/AuthContext";
 
 export default function SignUpForm() {
+  const {setAuth} = useAuthContext()
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -30,6 +33,9 @@ export default function SignUpForm() {
          {
              const token = res.data.token;
              localStorage.setItem('jwtToken', token);
+             const data = jwtDecode(token)
+             localStorage.setItem("user-details",data)
+             setAuth(data)
              router.push('/home')
          }
      }catch (e) {
