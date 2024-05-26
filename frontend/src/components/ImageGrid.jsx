@@ -13,6 +13,7 @@ export default function ImageGrid() {
             src={imageObj.src}
             width={150}
             height={150}
+            priority
             alt={imageObj.name}
           />
         ))}
