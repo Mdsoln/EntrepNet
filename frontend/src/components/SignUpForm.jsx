@@ -28,7 +28,10 @@ export default function SignUpForm() {
     }),
     onSubmit: async (values) => {
      try {
-         let res = await axios.post("http://localhost:8080/api/v1/user/login", values)
+       
+          let formData = JSON.stringify(values)
+          alert(formData)
+         let res = await axios.post("http://localhost:8080/api/v1/user/login",formData)
          if(res.status === 200)
          {
              const token = res.data.token;
