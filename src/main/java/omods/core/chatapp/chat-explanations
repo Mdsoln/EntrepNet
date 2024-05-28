@@ -1,0 +1,87 @@
+
+## Chat App Functionality Overview
+
+### Front-End Functionality:
+
+#### Sending Chat Messages
+
+Path: `/ws` (WebSocket connection)
+Description: Establishes a real-time WebSocket connection with the back-end for chat features.
+Front-end Action: Initiate a WebSocket connection to the server endpoint.
+
+#### Sending a Chat Message
+
+URL: Send message through `/app/chat` destination (WebSocket message)
+Description: The front-end sends a chat message via WebSocket to the `/app/chat` destination.
+Request Body: Serialized ChatMessage object (format depends on back-end implementation)
+ChatMessage Object (Example):
+    * `senderId (String)`: The ID of the message sender.
+    * `receiverId (String)`: The ID of the message recipient.
+    * `content (String)`: The text content of the message.
+
+* **Front-end Action:** Upon user interaction (e.g., sending a message button click), serialize a ChatMessage object and send it through the WebSocket connection to the `/app/chat` destination.
+
+#### Receiving Chat Messages
+
+* **URL:** Subscribe to `/users/topic` destination (WebSocket subscription)
+* **Description:** The front-end subscribes to the `/users/topic` destination for updates on connected users and potentially other broadcast messages.
+* **Expected Messages:** Message format varies depending on back-end implementation, but could include:
+    * New chat messages from other users.
+    * User connection updates (users joining or leaving the chat).
+
+* **Front-end Action:** Subscribe to the `/users/topic` destination. Upon receiving a message, parse the data and update the chat interface accordingly (e.g., display new messages, update user list).
+
+#### Retrieving Chat History
+
+* **Path:** `/api/v1/chat/message/{senderId}/{receiverId}` (REST API)
+* **Method:** GET
+* **Description:** Retrieves past chat history between two users.
+* **URL Parameters:**
+    * `{senderId}` (String): The ID of the current user.
+    * `{receiverId}` (String): The ID of the conversation partner.
+* **Response:**
+    * **Success:**
+        * Status Code: 200 OK
+        * Body: An array of ChatMessage objects representing the chat history.
+    * **Error:**
+        * Status Code: 404 Not Found
+        * Body: "Chat history not found" (or similar error message)
+
+* **Front-end Action:** When needed (e.g., displaying past conversation), make a GET request to this endpoint with appropriate user IDs.
+
+## Chat API Descriptions with JSON Formats
+
+This section details chat application APIs with functionalities and expected JSON formats.
+
+**1. Sending a Chat Message (WebSocket Message):**
+
+**Request Body (ChatMessage):**
+
+```json
+{
+  "senderId": "string",
+  "receiverId": "string",
+  "content": "string"
+}
+```
+
+**2. Receiving a Chat Message (WebSocket Message):**
+
+* For new chat messages:
+
+```json
+{
+  "senderId": "string",
+  "receiverId": "string",
+  "content": "string",
+  "timestamp": "long",
+  "id": "long" (optional - message ID)
+}
+```
+
+* For user connection updates (potential):
+
+```json
+{
+  "userId": "string",
+}
