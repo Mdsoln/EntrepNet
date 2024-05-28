@@ -47,31 +47,31 @@ export default function RegisterForm({ onNext }) {
         const { confirmpassword, ...data } = values;
 
         console.log(JSON.stringify(data))
-    //     axios.post(
-    //        "http://localhost:8080/api/v1/user/register",
-    //       JSON.stringify(data),
-    //        {
-    //          headers: {
-    //             "Content-Type": "application/json",
-    //          "Accept":"*/*",
-    //        },
-    //      }
-    //  ).then(
-    //       (response) =>  {
-    //         const token = response.data.token;
-    //         //store token and user details
-    //         localStorage.setItem('jwtToken', token);       
-    //         localStorage.setItem("user-details",JSON.stringify(data))
+         axios.post(
+            "http://localhost:8080/api/v1/user/register",
+           JSON.stringify(data),
+            {
+              headers: {
+                 "Content-Type": "application/json",
+              "Accept":"*/*",
+            },
+          }
+      ).then(
+           (response) =>  {
+             const token = response.data.token;
+             //store token and user details
+             localStorage.setItem('jwtToken', token);       
+             localStorage.setItem("user-details",JSON.stringify(data))
 
-    //         //set authenticated user for global state
-    //          setAuth(data)
-    //         toast.success("Let us complete your profile");
-    //          onNext(data);
+              //set authenticated user for global state
+               setAuth(data)
+              toast.success("Let us complete your profile");
+               onNext(data);
 
-    //        }
-    //     ).catch ((error)=>{
-    //       console.log(error.message)
-    //  })
+           }
+        ).catch ((error)=>{
+          console.log(error.message)
+      })
      
        onNext(data);
 
