@@ -8,10 +8,10 @@ import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { Settings,LogOut,Pencil, Mails, CircleHelp} from 'lucide-react';
 import PostModal from './PostModal'
 import Link from 'next/link';
-import {useAuth} from "@/hooks/use-auth";
+import {useLogout} from "@/hooks/use-auth";
 
 export default function Sidebar() {
-    const { signOut } = useAuth();
+    const { signOut } = useLogout();
 
     const handleSignOut = async () => {
         await signOut();

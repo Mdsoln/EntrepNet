@@ -1,13 +1,17 @@
 
+import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
-export const  useAuth =()=>{
+export const  useLogout =()=>{
+    const {setAuth} = useAuthContext()
     const router = useRouter()
    const signOut = async ()=>{
     try {
         localStorage.removeItem('jwtToken')
-        router.push("/sign-in")
+        localStorage.removeItem('user-details')
+        setAuth(null)
+        router.push("/signin")
         router.refresh()
     } 
     
