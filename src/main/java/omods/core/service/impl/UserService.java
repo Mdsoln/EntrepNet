@@ -122,7 +122,7 @@ public class UserService implements UserServiceInterface {
 
 
     @Override
-    public ResponseEntity<AuthResponse> completeProfile(String email, String job, String locatedAt, String role, MultipartFile imagePath) {
+    public ResponseEntity<AuthResponse> completeProfile(String email, String job, String location, String role,String topic, MultipartFile imagePath) {
         try {
             User creator = userRepository.findByEmail(email);
             if (creator == null){
@@ -141,7 +141,8 @@ public class UserService implements UserServiceInterface {
                     .builder()
                     .job(job)
                     .imagePath(storeImages(imagePath))
-                    .locatedAt(locatedAt)
+                    .locatedAt(location)
+                    .topic(topic)
                     .user(creator)
                     .build();
             profileRepo.save(profile);

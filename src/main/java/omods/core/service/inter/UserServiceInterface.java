@@ -17,7 +17,7 @@ public interface UserServiceInterface {
 
     ResponseEntity<List<UserDetails>> getUsersProfile();
 
-    ResponseEntity<AuthResponse> completeProfile(String email, String job, String locatedAt, String role, MultipartFile imagePath);
+    ResponseEntity<AuthResponse> completeProfile(String email, String job, String locatedAt, String role,String topic, MultipartFile imagePath);
 
     ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest);
 
