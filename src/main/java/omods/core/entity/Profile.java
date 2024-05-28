@@ -35,4 +35,7 @@ public class Profile {
 
     @Column(name = "images", nullable = false)
     private String imagePath;
+
+    @Column(name = "professional", nullable = false)
+    private String topic;
 }

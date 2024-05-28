@@ -30,11 +30,12 @@ public class UserController {
     public ResponseEntity<AuthResponse> completeProfile(
             @RequestParam(name = "email", required = false) String email,
             @RequestParam(name = "job", required = false) String job,
-            @RequestParam(name = "locatedAt", required = false) String locatedAt,
+            @RequestParam(name = "location", required = false) String location,
             @RequestParam(name = "role", required = false) String role,
+            @RequestParam(name = "topic", required = false) String topic,
             @RequestParam(name = "image", required = false) MultipartFile imagePath
     ){
-      return userService.completeProfile(email, job, locatedAt, role, imagePath);
+      return userService.completeProfile(email, job, location, role,topic, imagePath);
     }
 
     @PostMapping("/forget-password")
