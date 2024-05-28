@@ -10,12 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "/api/v1/post")
 @RequiredArgsConstructor
 public class PostCreationController {
    private final PostServiceImpl postService;
 
+   @CrossOrigin
    @PostMapping("/createPost")
    public ResponseEntity<Post> createPost(
            @RequestParam(name = "postContent", required = false) String postContent,
@@ -25,6 +27,7 @@ public class PostCreationController {
       return postService.createPost(postContent, postedFrom, imagePath);
    }
 
+   @CrossOrigin
    @GetMapping("/recentPosts")
    public ResponseEntity<List<Post>> getRecentPosts(){
       List<Post> recentPosts = postService.getRecentPosts();

@@ -20,12 +20,14 @@ public class UserController {
 
     private final UserService userService;
 
+    @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity<String> registerNewUser(@RequestBody UserDto userDto){
         return userService.registerNewUser(userDto);
     }
 
     //initially user will have also token
+    @CrossOrigin
     @PostMapping("/complete-profile")
     public ResponseEntity<AuthResponse> completeProfile(
             @RequestParam(name = "email", required = false) String email,
@@ -38,23 +40,26 @@ public class UserController {
       return userService.completeProfile(email, job, location, role,topic, imagePath);
     }
 
+    @CrossOrigin
     @PostMapping("/forget-password")
     public ResponseEntity<String> forgetPassword(@RequestParam String email){
         return userService.forgetPassword(email);
     }
 
+    @CrossOrigin
     //login goes here
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest authRequest){
         return userService.authenticate(authRequest);
     }
 
-
+    @CrossOrigin
     @GetMapping("/user-details")
     public ResponseEntity<List<UserDetails>> getUserProfile(){
         return userService.getUsersProfile();
     }
 
+    @CrossOrigin
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getUser(@PathVariable("userId") String userId){
         return userService.findUser(userId);
