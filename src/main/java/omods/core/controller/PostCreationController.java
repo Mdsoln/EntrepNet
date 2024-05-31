@@ -20,11 +20,11 @@ public class PostCreationController {
    @CrossOrigin
    @PostMapping("/createPost")
    public ResponseEntity<Post> createPost(
-           @RequestParam(name = "postContent", required = false) String postContent,
+           @RequestParam(name = "post", required = false) String post,
            @RequestParam(name = "postedFrom", required = false) String postedFrom,
-           @RequestParam(name = "imagePath", required = false) MultipartFile imagePath
+           @RequestParam(name = "file1", required = false) MultipartFile file1
            ){//list of images or one image
-      return postService.createPost(postContent, postedFrom, imagePath);
+      return postService.createPost(post, postedFrom, file1);
    }
 
    @CrossOrigin
