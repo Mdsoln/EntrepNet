@@ -9,11 +9,23 @@ import { useRouter } from "next/navigation";
 export default function page() {
   const router = useRouter()
   const {auth,setAuth} = useAuthContext()
-  // useEffect(()=>{
-  //    if(!auth){
-  //     router.push("/signin")
-  //    }
-  // },[router])
+   useEffect(()=>{
+     if(!auth || auth===null){
+
+      
+      router.push("/signin")
+
+      return;
+     }
+  },[router])
+
+  if(auth == null){
+
+   
+    router.push("/signin")
+
+    return ;
+  }
 
   return (
     <main className='h-full grid grid-cols-3 gap-64'>

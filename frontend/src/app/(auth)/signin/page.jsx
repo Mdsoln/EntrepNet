@@ -9,6 +9,8 @@ export default function page() {
   const router = useRouter()
   if(auth){
     router.push("/home")
+
+    return;
   }
   return (
     <> 
