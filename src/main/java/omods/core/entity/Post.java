@@ -31,7 +31,7 @@ public class Post {
     private String postContent;
     @Column(name = "image_url", nullable = false)
     private String postImage;
-    @Column(name = "posted_from"/*, nullable = false*/)
+    @Column(name = "posted_from", nullable = false)
     private String location;
     @Column(name = "createdAt", nullable = false)
     private LocalDate postCreatedAt;

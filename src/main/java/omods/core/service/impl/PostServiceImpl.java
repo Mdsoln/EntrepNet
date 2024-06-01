@@ -29,7 +29,7 @@ public class PostServiceImpl implements PostService {
     public ResponseEntity<Post> createPost(String postContent, String postedFrom, MultipartFile imagePath) {
         try {
 
-            if (imagePath.isEmpty() || postContent.isEmpty()/* || postedFrom.isEmpty()*/){
+            if (imagePath.isEmpty() || postContent.isEmpty() || postedFrom.isEmpty()){
                 throw new ExceptionHandlerManager("Error: "+ "All fields are required");
             }
 
@@ -78,7 +78,7 @@ public class PostServiceImpl implements PostService {
         Path filePath = uploadPath.resolve(imageName);
         Files.copy(imageUrl.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        return imageName;
+        return "/resources/images/" + imageName;
     }
 
 }
