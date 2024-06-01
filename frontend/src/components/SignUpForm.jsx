@@ -17,7 +17,7 @@ export default function SignUpForm() {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      psw: "",
+      password: "",
       email: "",
     },
     validationSchema: Yup.object({
