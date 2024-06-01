@@ -9,10 +9,10 @@ export default function page() {
   return (
     <>
       <MaxWidthWrapper>
-        <div className="flex gap-x-24">
+        <main className="flex gap-x-24">
           <Hero />
           <ImageGrid />
-        </div>
+        </main>
       </MaxWidthWrapper>
     </>
   );
