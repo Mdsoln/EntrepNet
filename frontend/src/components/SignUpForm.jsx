@@ -17,11 +17,11 @@ export default function SignUpForm() {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      password: "",
+      psw: "",
       email: "",
     },
     validationSchema: Yup.object({
-      password: Yup.string()
+      psw: Yup.string()
         .min(8, "password should have atleast 8 characters")
         .required("required"),
       email: Yup.string().email("Invalid email address").required("required"),
@@ -80,11 +80,11 @@ export default function SignUpForm() {
             className="w-64"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.password}
+            value={formik.values.psw}
           />
           <div className="flex gap-x-4">  
-            {formik.touched.password && formik.errors.password ? (
-            <span className="text-sm font-light text-red-600">{formik.errors.password}</span>
+            {formik.touched.password && formik.errors.psw? (
+            <span className="text-sm font-light text-red-600">{formik.errors.psw}</span>
           ) : null}
     
          </div>
