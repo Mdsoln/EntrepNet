@@ -7,9 +7,13 @@ import { useRouter } from "next/navigation";
 import TopicsTabs from "./TopicsTabs";
 import axios from "axios";
 import { toast } from "sonner";
+import { jwtDecode } from "jwt-decode";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function ProfileForm({ formData }) {
-  const { email } = formData;
+  const {setAuth}= useAuthContext()
+  const { email,token } = formData;
+  console.log(token)
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -45,8 +49,13 @@ export default function ProfileForm({ formData }) {
         });
 
         if (res.status === 200) {
-          const token = res.data.token;
-          localStorage.setItem('jwtToken', token);
+         const token = res.data.token
+          
+           const userDetails = jwtDecode(token) 
+           localStorage.setItem('jwtToken',token);    
+           localStorage.setItem("user-details",JSON.stringify(userDetails))
+           setAuth(userDetails)
+          
           toast.success("Congratulations!! Your profile is complete!!");
         } else {
           toast.error("We've encountered an error, please try again later");
