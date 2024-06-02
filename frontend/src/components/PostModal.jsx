@@ -36,6 +36,7 @@ export default function PostModal() {
     });
   };
 
+     const [content, setContent] = useState({})
   const handleUpload = (event) => {
     const selectedFile = event.target.files;
     if (selectedFile) {
@@ -63,14 +64,26 @@ export default function PostModal() {
     }
 
     try {
+
+      console.log(postData)
       // Send postData to server using fetch or any other method
-      axios.post('http://localhost:8080/api/v1/post',JSON.stringify(postData),{
+      let response  = axios.post('http://localhost:8080/api/v1/post/createPost',postData,{
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      toast.success("u have successful created a post!")
-      router.refresh()
+
+     if(response.ok){
+       toast.success("you have successfully created a post")
+       let newPost = JSON.stringify(response)
+       setContent(newPost)
+       router.refresh()
+     }else{
+       toast.error("an error occured")
+       console.log(response.message)
+     }
+
+
       
     } catch (error) {
       console.error("Error posting data:", error);

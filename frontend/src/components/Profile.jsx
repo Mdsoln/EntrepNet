@@ -11,29 +11,32 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
 import { Separator } from './ui/separator';
+import {useAuthContext} from '../context/AuthContext'
 import axios from 'axios';
 import { toast } from "sonner";
 export default function Profile() {
-    const [data, setData] = useState({});
-    useEffect(() => {
-        try {
+    // const [data, setData] = useState({});
+    // useEffect(() => {
+    //     try {
 
-            async function fetchData(){
-                ({data: response} = await axios.get('http://localhost:8080/api/v1/user/', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }));
-                setData(response)
-            }
+    //         async function fetchData(){
+    //             ({data: response} = await axios.get('http://localhost:8080/api/v1/user/', {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                 },
+    //             }));
+    //             setData(response)
+    //         }
 
-        } catch (err) {
-            toast.error("something went wrong fetching ur profile")
+    //     } catch (err) {
+    //         toast.error("something went wrong fetching ur profile")
 
-            console.log(err)
-        }
+    //         console.log(err)
+    //     }
 
-    }, []);
+    // }, []);
+
+    const {auth} = useAuthContext()
 
     return (
         <Sheet>
@@ -63,10 +66,10 @@ export default function Profile() {
                 </SheetHeader>
 
                 <div className='text-white flex flex-col gap-y-8'>
-                    <div className='grid grid-cols-2'><span>Name:</span><span>{data.name}</span></div>
-                    <div className='grid grid-cols-2'><span>Phone:</span><span>{data.phone}</span></div>
-                    <div className='grid grid-cols-2'><span>Email:</span>{data.email}<span></span></div>
-                    <div className='grid grid-cols-2'><span>Job:</span><span>{data.job}</span></div>
+                    <div className='grid grid-cols-2'><span>Name:</span><span>{auth.firstname + "" + auth.surname}</span></div>
+                    <div className='grid grid-cols-2'><span>Phone:</span><span>{auth.mobile}</span></div>
+                    <div className='grid grid-cols-2'><span>Email:</span>{auth.email}<span></span></div>
+                    <div className='grid grid-cols-2'><span>Job:</span><span>{auth.job}</span></div>
 
                 </div>
                 <Separator orientation="horizontal" className="w-full mt-8" />

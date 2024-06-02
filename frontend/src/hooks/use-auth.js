@@ -10,7 +10,7 @@ export const  useLogout =()=>{
     try {
         localStorage.removeItem('jwtToken')
         localStorage.removeItem('user-details')
-        setAuth(null)
+        setAuth("")
         router.push("/signin")
         router.refresh()
     } 
