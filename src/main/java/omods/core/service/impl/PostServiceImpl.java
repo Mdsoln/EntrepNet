@@ -66,7 +66,7 @@ public class PostServiceImpl implements PostService {
             throw new IllegalArgumentException("Image file is null or empty");
         }
 
-        String uploadDirectory = "src/resources/images";
+        String uploadDirectory = "src/main/resources/static/images";
         String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(imageUrl.getOriginalFilename()));
 
         if (originalFilename.contains("..")) {
