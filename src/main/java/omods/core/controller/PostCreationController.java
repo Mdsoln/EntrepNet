@@ -34,5 +34,10 @@ public class PostCreationController {
       List<Post> recentPosts = postService.getRecentPosts();
       return ResponseEntity.ok(recentPosts);
    }
-   
+
+   @CrossOrigin
+   @GetMapping("/image/{imageName}")
+   public ResponseEntity<String> getImage(@PathVariable String imageName){
+      return postService.getImagePath(imageName);
+   }
 }

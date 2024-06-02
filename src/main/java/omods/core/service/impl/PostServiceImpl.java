@@ -8,6 +8,7 @@ import omods.core.repo.PostRepo;
 import omods.core.service.inter.PostService;
 import omods.core.entity.Post;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +59,18 @@ public class PostServiceImpl implements PostService {
             return postRepo.findRecentPosts();
         }catch (DataAccessException dataAccessException){
             throw new ExceptionHandlerManager("Error: " + dataAccessException);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getImagePath(String imageName) {
+        Optional<String> image_path = postRepo.findByPostImage(imageName);
+        if (image_path.isPresent()){
+            String imagePath = "/images/" + imageName;
+            return ResponseEntity.status(HttpStatus.FOUND).body(imagePath);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Oops! image not found");
         }
     }
 
