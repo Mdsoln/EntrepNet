@@ -1,11 +1,14 @@
 package omods.core.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import omods.core.entity.FileMapping;
 import omods.core.exc.ExceptionHandlerManager;
+import omods.core.repo.FileMappingRepository;
 import omods.core.repo.PostRepo;
 import omods.core.service.inter.PostService;
 import omods.core.entity.Post;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -18,19 +21,21 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepo postRepo;
+    private final FileMappingRepository fileMappingRepository;
 
     @Override
     public ResponseEntity<Post> createPost(String postContent, String postedFrom, MultipartFile imagePath) {
         try {
 
-            if (imagePath.isEmpty() || postContent.isEmpty() || postedFrom.isEmpty()){
-                throw new ExceptionHandlerManager("Error: "+ "All fields are required");
+            if (/*postedFrom == null */postContent == null || imagePath.isEmpty() || postContent.isEmpty() /*|| postedFrom.isEmpty()*/){
+                throw new ExceptionHandlerManager("All fields are required");
             }
 
             Post newPost = new Post();
@@ -42,9 +47,9 @@ public class PostServiceImpl implements PostService {
             return ResponseEntity.ok(newPost);
 
         } catch (ExceptionHandlerManager | IOException exception){
-            throw new ExceptionHandlerManager("Error: "+exception);
+            throw new ExceptionHandlerManager("Error: "+exception.getMessage());
         } catch (Exception exception){
-            throw new RuntimeException("Error: " + exception);
+            throw new RuntimeException("Error: " + exception.getMessage());
         }
     }
 
@@ -57,17 +62,45 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
+    public ResponseEntity<String> getImagePath(String imageName) {
+        Optional<String> image_path = postRepo.findByPostImage(imageName);
+        if (image_path.isPresent()){
+            String imagePath = "/images/" + imageName;
+            return ResponseEntity.status(HttpStatus.FOUND).body(imagePath);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Oops! image not found");
+        }
+    }
+
 
     public String storeImages(MultipartFile imageUrl) throws IOException {
         if (imageUrl == null || imageUrl.isEmpty()) {
             throw new IllegalArgumentException("Image file is null or empty");
         }
 
-        String uploadDirectory = "src/resources/images";
-        String imageName = StringUtils.cleanPath(Objects.requireNonNull(imageUrl.getOriginalFilename()));
+        String uploadDirectory = "src/main/resources/static/images";
+        String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(imageUrl.getOriginalFilename()));
 
-        if (imageName.contains("..")) {
+        if (originalFilename.contains("..")) {
             throw new IllegalArgumentException("Invalid file format");
+        }
+
+        // Check and handle filename length
+
+        String truncatedFilename = originalFilename;
+        int maxLength = 255;
+        if (originalFilename.length() > maxLength) {
+            // Get the file extension
+            String fileExtension = "";
+            int dotIndex = originalFilename.lastIndexOf(".");
+            if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
+                fileExtension = originalFilename.substring(dotIndex);
+                truncatedFilename = originalFilename.substring(0, maxLength - fileExtension.length()) + fileExtension;
+            } else {
+                truncatedFilename = originalFilename.substring(0, maxLength);
+            }
         }
 
         Path uploadPath = Paths.get(uploadDirectory);
@@ -75,10 +108,16 @@ public class PostServiceImpl implements PostService {
             Files.createDirectories(uploadPath);
         }
 
-        Path filePath = uploadPath.resolve(imageName);
+        Path filePath = uploadPath.resolve(truncatedFilename);
         Files.copy(imageUrl.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        return "/resources/images/" + imageName;
+        // Save the mapping in the database
+        FileMapping fileMapping = new FileMapping();
+        fileMapping.setOriginalFilename(originalFilename);
+        fileMapping.setTruncatedFilename(truncatedFilename);
+        fileMappingRepository.save(fileMapping);
+
+        return truncatedFilename;
     }
 
 }

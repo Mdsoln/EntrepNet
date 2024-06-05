@@ -11,4 +11,6 @@ public interface PostService {
     ResponseEntity<Post> createPost(String postContent, String postedFrom, MultipartFile imagePath);
 
     List<Post> getRecentPosts();
+
+    ResponseEntity<String> getImagePath(String imageName);
 }
