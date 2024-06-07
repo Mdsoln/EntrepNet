@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import omods.core.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,7 @@ public class JwtService {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", userDetails.getAuthorities());
+        claims.put("userID", ((User) userDetails).getRegNo()); // Add userRegNo to the claims
         return Jwts
                 .builder()
                 .setClaims(claims)
