@@ -58,13 +58,7 @@ export default function RegisterForm({ onNext }) {
           }
       ).then(
            (response) =>  {
-             const token = response.data.token;
-             //store token and user details
-             localStorage.setItem('jwtToken', token);       
-             localStorage.setItem("user-details",JSON.stringify(data))
-
-              //set authenticated user for global state
-               setAuth(data)
+             console.log(response)
               toast.success("Let us complete your profile");
                onNext(data);
 
@@ -73,7 +67,7 @@ export default function RegisterForm({ onNext }) {
           console.log(error.message)
       })
      
-       onNext(data);
+  
 
     },
   });
