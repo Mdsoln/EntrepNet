@@ -60,10 +60,15 @@ public class JwtService {
                 .compact();
     }
 
+    //todo: image url
+    //todo: follow and following
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", userDetails.getAuthorities());
         claims.put("userID", ((User) userDetails).getRegNo()); // Add userRegNo to the claims
+        claims.put("name",((User) userDetails).getName());
+        claims.put("phone",((User) userDetails).getMobile());
+        claims.put("job",((User) userDetails).getProfile().getJob());
         return Jwts
                 .builder()
                 .setClaims(claims)
