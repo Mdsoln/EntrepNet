@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import omods.core.entity.User;
+import omods.core.repo.ProfileRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "yILd4iHh3ngQWnnEnDhXNQmpOpreM5R0KxNKlHAX5BmNR/elp4ybJfKc6GTgwlPu";
+
+    private final ProfileRepo profileRepo;
 
     public String extractUsername(String jwt) {
         return extractClaim(jwt, Claims::getSubject);
@@ -68,7 +71,7 @@ public class JwtService {
         claims.put("userID", ((User) userDetails).getRegNo()); // Add userRegNo to the claims
         claims.put("name",((User) userDetails).getName());
         claims.put("phone",((User) userDetails).getMobile());
-        claims.put("job",((User) userDetails).getProfile().getJob());
+        claims.put("job",getJob());
         return Jwts
                 .builder()
                 .setClaims(claims)
@@ -77,6 +80,10 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    private Object getJob() {
+        return profileRepo.findJob();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){

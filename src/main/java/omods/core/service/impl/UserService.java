@@ -129,11 +129,7 @@ public class UserService implements UserServiceInterface {
                 throw new ExceptionHandlerManager("Oops! email not matches with any user");
             }
 
-            if (role.equalsIgnoreCase("MENTOR")){
-                creator.setRoles(Roles.MENTOR);
-            } else if (role.equalsIgnoreCase("ENTREPRENEUR")) {
-                creator.setRoles(Roles.ENTREPRENEUR);
-            }
+            creator.setRoles(role.equalsIgnoreCase("MENTOR") ? Roles.MENTOR : Roles.ENTREPRENEUR);
 
             userRepository.save(creator);
 
@@ -149,12 +145,12 @@ public class UserService implements UserServiceInterface {
 
             var token = jwtService.generateToken(creator);
             return ResponseEntity.ok(AuthResponse.builder().token(token).build());
-
-        }catch (ExceptionHandlerManager exceptions){
-            AuthResponse authResponse = new AuthResponse(exceptions.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authResponse);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        catch (AuthenticationException handleExceptions){
+            AuthResponse error = AuthResponse.builder().token("Error: "+handleExceptions.getMessage()).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
     }
 
