@@ -93,3 +93,128 @@ On error, the endpoint returns an appropriate HTTP status code with a JSON respo
 {
   "error": "Missing user claims in profile details"
 }
+
+
+
+CHAT APP
+## API Endpoints Documentation
+
+### 1. Get Connected Users
+
+**Endpoint**: `GET /users`
+
+**Description**: Retrieves a list of currently connected users.
+
+**Request**:
+- No parameters or body required.
+
+**Response**:
+- **Status**: 200 OK
+- **Body**: A JSON array of User objects.
+
+**Response JSON Structure**:
+```json
+[
+  {
+    "userID": "string",
+    "name": "string",
+    "email": "string",
+    "mobile": "string",
+    "status": "ONLINE|OFFLINE"
+  }
+]
+
+[
+  {
+    "userID": "1",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "mobile": "1234567890",
+    "status": "ONLINE"
+  },
+  {
+    "userID": "2",
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "mobile": "0987654321",
+    "status": "ONLINE"
+  }
+]
+Endpoint: GET /message/{senderId}/{receiverId}
+
+Description: Retrieves chat messages between the specified sender and receiver.
+
+Request:
+
+    Path Variables:
+        senderId: The ID of the sender.
+        receiverId: The ID of the receiver.
+
+Response:
+
+    Status: 200 OK
+    Body: A JSON array of ChatMessage objects.
+[
+  {
+    "id": "string",
+    "senderId": "string",
+    "receiverId": "string",
+    "content": "string",
+    "timestamp": "string"
+  }
+]
+[
+  {
+    "id": "1",
+    "senderId": "1",
+    "receiverId": "2",
+    "content": "Hello, how are you?",
+    "timestamp": "2024-06-09T12:34:56Z"
+  },
+  {
+    "id": "2",
+    "senderId": "2",
+    "receiverId": "1",
+    "content": "I'm good, thanks! How about you?",
+    "timestamp": "2024-06-09T12:35:10Z"
+  }
+]
+Endpoint: POST /chat (via WebSocket)
+
+Description: Processes and saves a chat message, then sends a notification to the receiver.
+
+Request:
+
+    Payload:
+        ChatMessage object.
+{
+  "id": "string",
+  "senderId": "string",
+  "receiverId": "string",
+  "content": "string",
+  "timestamp": "string"
+}
+{
+  "id": "3",
+  "senderId": "1",
+  "receiverId": "2",
+  "content": "Are you available for a call?",
+  "timestamp": "2024-06-09T12:36:00Z"
+}
+Response:
+
+    No direct response as it's a WebSocket message, but a notification will be sent to the receiver.
+
+Notification JSON Structure:
+{
+  "id": "string",
+  "senderId": "string",
+  "receiverId": "string",
+  "content": "string"
+}
+{
+  "id": "3",
+  "senderId": "1",
+  "receiverId": "2",
+  "content": "Are you available for a call?"
+}
