@@ -5,12 +5,12 @@ import useConversation from '../../zustand/store';
 
 
 export default function Conversation({ conversation}) {
-  const { selectedConversation, setSelectedConversation } = useConversation();
+   const { selectedConversation, setSelectedConversation } = useConversation();
 
-  const isSelected = selectedConversation?._id === conversation._id;
+   const isSelected = selectedConversation?.id === conversation.id;
 
-  const {onlineUsers} = useSocketContext()
-  const isOnline = onlineUsers.includes(conversation._id)
+   const {connectedUsers} = useSocketContext()
+   const isOnline = connectedUsers.includes(conversation.id)
   return (
     <div
       onClick={() => setSelectedConversation(conversation)}
@@ -20,14 +20,14 @@ export default function Conversation({ conversation}) {
       <div className={`avatar ${isOnline ? "online" :""}`}>
         <div className="w-12 h-12 rounded-full">
           {/* eslint-disable-next-line react/prop-types */}
-          <img src={conversation.profile} alt="image" />
+          <img src={"/erose.svg"} alt="image" />
         </div>
       </div>
 
       {/* Name and mood emoji */}
       <div className='flex gap-4 justify-between'>
         {/* eslint-disable-next-line react/prop-types */}
-        <p className='font-bold text-white'>{conversation.firstName}</p>
+        <p className='font-bold text-white'>Hello</p>
       </div>
       <div className="divider my-0 py-0 h-1"></div>
     </div>
