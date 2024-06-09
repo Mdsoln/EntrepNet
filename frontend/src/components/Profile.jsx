@@ -66,9 +66,9 @@ export default function Profile() {
                 </SheetHeader>
 
                 <div className='text-white flex flex-col gap-y-8'>
-                    <div className='grid grid-cols-2'><span>Name:</span><span>{auth.firstname + "" + auth.surname}</span></div>
-                    <div className='grid grid-cols-2'><span>Phone:</span><span>{auth.mobile}</span></div>
-                    <div className='grid grid-cols-2'><span>Email:</span>{auth.email}<span></span></div>
+                    <div className='grid grid-cols-2'><span>Name:</span><span>{auth.name}</span></div>
+                    <div className='grid grid-cols-2'><span>Phone:</span><span>{auth.phone}</span></div>
+                    <div className='grid grid-cols-2'><span>Email:</span>{auth.sub}<span></span></div>
                     <div className='grid grid-cols-2'><span>Job:</span><span>{auth.job}</span></div>
 
                 </div>
