@@ -1,44 +1,38 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import useConversation from "../zustand/store.js";
 import toast from "react-hot-toast";
+import {useAuthContext} from "@/context/AuthContext";
 
 const useGetMessages = () => {
+    const [loading, setLoading] = useState(false);
+    const { messages, setMessages, selectedConversation } = useConversation();
 
-    const [loading, setLoading] = useState(false );
-    const {messages, setMessages,selectedConversation}= useConversation()
-
-    useEffect(()=>{
+    useEffect(() => {
+        const {auth} = useAuthContext()
         const getMessages = async () => {
-            setLoading(true)
+            setLoading(true);
             try {
-                const res = await fetch(`http://localhost/messages/${selectedConversation._id.toString()}`)
-    
-                const data = await res.json()
-                if(data){
-                    console.log("we have connected with the api")
+                const response = await fetch(
+                    `/ws://localhost:8080/api/v1/chat/message/${auth.userID}/${receiverId}`
+                );
+                if (response.ok) {
+                    const data = await response.json();
+                    setMessages(data);
+                } else {
+                    console.error("Failed to fetch messages:", response.statusText);
+                    // Handle failed response appropriately (e.g., show error message)
                 }
-    
-                if(data.error){
-                    throw new Error(data.error)
-                }
-    
-                setMessages(data)
-    
-            }catch(err){
-    
-              console.log(`error in the get messages `)
-    
-            }finally {
-            setLoading(false)
+            } catch (err) {
+                console.error("Error fetching messages:", err);
+            } finally {
+                setLoading(false);
             }
-    
-    
-    
-        }
-           if(selectedConversation?._id) getMessages()
-    },[selectedConversation?._id,setMessages])
+        };
 
-    return {messages,loading};
-}
+        if (selectedConversation?.id) getMessages();
+    }, [selectedConversation?.id, setMessages]);
 
-export default useGetMessages
+    return { messages, loading };
+};
+
+export default useGetMessages;
