@@ -12,29 +12,8 @@ import Image from 'next/image';
 import { Pencil } from 'lucide-react';
 import { Separator } from './ui/separator';
 import {useAuthContext} from '../context/AuthContext'
-import axios from 'axios';
-import { toast } from "sonner";
+
 export default function Profile() {
-    // const [data, setData] = useState({});
-    // useEffect(() => {
-    //     try {
-
-    //         async function fetchData(){
-    //             ({data: response} = await axios.get('http://localhost:8080/api/v1/user/', {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`,
-    //                 },
-    //             }));
-    //             setData(response)
-    //         }
-
-    //     } catch (err) {
-    //         toast.error("something went wrong fetching ur profile")
-
-    //         console.log(err)
-    //     }
-
-    // }, []);
 
     const {auth} = useAuthContext()
 
