@@ -21,9 +21,17 @@ import { Separator } from "./ui/separator";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import usePosts from "zustand/usePosts.js"
+import { useAuthContext } from "../context/AuthContext";
 export default function PostModal() {
   const router = useRouter()
+  
   const [files, setFile] = useState(null);
+  
+  //get the userId from the client browser
+
+  const {auth} = useAuthContext()
+  const postedFrom = auth.userID
+  
   const [formData, setFormData] = useState({
     post: "",
     files: null,
@@ -36,7 +44,7 @@ export default function PostModal() {
     });
   };
 
-     const {setPosts, posts} = usePosts()
+     const {setPosts} = usePosts()
   const handleUpload = (event) => {
     const selectedFile = event.target.files;
     if (selectedFile) {
@@ -49,8 +57,9 @@ export default function PostModal() {
 
     const postData = new FormData();
     postData.append("post", formData.post);
+    postData.append("postedFrom",postedFrom)
 
-    
+    //check the upload limit
     if (files) {
       if(files.length>3){
 
