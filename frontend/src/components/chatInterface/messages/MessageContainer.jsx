@@ -2,7 +2,7 @@ import  {useEffect} from 'react'
 import Messages from './Messages'
 import MessageInput from './MessageInput'
 import NoChatSelected from './NoChatSelected';
-import useConversation from "../../zustand/store.js";
+import useConversation from "../../../zustand/store";
 
 export default function MessageContainer() {
      const {selectedConversation,setSelectedConversation} =useConversation()
