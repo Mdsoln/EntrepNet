@@ -13,7 +13,7 @@ const useGetMessages = () => {
             setLoading(true);
             try {
                 const response = await fetch(
-                    `/ws://localhost:8080/api/v1/chat/message/${auth.userID}/${receiverId}`
+                    `/ws://localhost:8080/api/v1/chat/message/${auth.userID}/${selectedConversation.receiverID}`
                 );
                 if (response.ok) {
                     const data = await response.json();
@@ -29,7 +29,10 @@ const useGetMessages = () => {
             }
         };
 
-        if (selectedConversation?.id) getMessages();
+        if (selectedConversation?.id){
+            getMessages()
+        }
+
     }, [selectedConversation?.id, setMessages]);
 
     return { messages, loading };
