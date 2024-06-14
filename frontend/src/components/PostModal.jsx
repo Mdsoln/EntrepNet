@@ -81,10 +81,7 @@ export default function PostModal() {
       })
 
      if(response.ok){
-       toast.success("you have successfully created a post")
-       let newPost = JSON.stringify(response)
-       setPosts(newPost)
-      
+       toast.success("you have successfully created a post") 
      }else{
        toast.error("an error occured")
        console.log(response.message)
