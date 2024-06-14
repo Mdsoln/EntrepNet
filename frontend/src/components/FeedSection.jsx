@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import usePosts from 'zustand/usePosts.js'
+import usePosts from '../zustand/usePosts'
 export default function FeedSection() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
