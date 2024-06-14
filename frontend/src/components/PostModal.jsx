@@ -20,8 +20,8 @@ import { GoPaperAirplane } from "react-icons/go";
 import { Separator } from "./ui/separator";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import usePosts from "zustand/usePosts.js"
-import { useAuthContext } from "../context/AuthContext";
+import usePosts from "../zustand/usePosts.js"
+import { useAuthContext } from "@/context/AuthContext";
 export default function PostModal() {
   const router = useRouter()
   
@@ -83,7 +83,7 @@ export default function PostModal() {
      if(response.ok){
        toast.success("you have successfully created a post") 
      }else{
-       toast.error("an error occured")
+       toast.error("an error occurred")
        console.log(response.message)
      }
 
