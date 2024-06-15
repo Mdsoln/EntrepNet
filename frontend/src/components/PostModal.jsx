@@ -20,10 +20,18 @@ import { GoPaperAirplane } from "react-icons/go";
 import { Separator } from "./ui/separator";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
+import usePosts from "../zustand/usePosts.js"
+import { useAuthContext } from "@/context/AuthContext";
 export default function PostModal() {
   const router = useRouter()
+  
   const [files, setFile] = useState(null);
+  
+  //get the userId from the client browser
+
+  const {auth} = useAuthContext()
+  const postedFrom = auth.userID
+  
   const [formData, setFormData] = useState({
     post: "",
     files: null,
@@ -36,7 +44,7 @@ export default function PostModal() {
     });
   };
 
-     const [content, setContent] = useState({})
+     const {setPosts} = usePosts()
   const handleUpload = (event) => {
     const selectedFile = event.target.files;
     if (selectedFile) {
@@ -49,8 +57,9 @@ export default function PostModal() {
 
     const postData = new FormData();
     postData.append("post", formData.post);
+    postData.append("postedFrom",postedFrom)
 
-    
+    //check the upload limit
     if (files) {
       if(files.length>3){
 
@@ -64,8 +73,6 @@ export default function PostModal() {
     }
 
     try {
-
-      console.log(postData)
       // Send postData to server using fetch or any other method
       let response  = axios.post('http://localhost:8080/api/v1/post/createPost',postData,{
         headers: {
@@ -74,12 +81,9 @@ export default function PostModal() {
       })
 
      if(response.ok){
-       toast.success("you have successfully created a post")
-       let newPost = JSON.stringify(response)
-       setContent(newPost)
-       router.refresh()
+       toast.success("you have successfully created a post") 
      }else{
-       toast.error("an error occured")
+       toast.error("an error occurred")
        console.log(response.message)
      }
 
@@ -88,6 +92,11 @@ export default function PostModal() {
     } catch (error) {
       console.error("Error posting data:", error);
       toast.error(error)
+    }finally{
+      setFormData({
+        post: "",
+        files: null,
+      })
     }
   };
 

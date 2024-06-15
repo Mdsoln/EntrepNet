@@ -28,7 +28,7 @@ export default function page() {
   }
 
   return (
-    <main className='h-full grid grid-cols-3 gap-64'>
+    <main className='h-full flex justify-between'>
         <Sidebar /> 
         <FeedSection/>
         <RightBar />
