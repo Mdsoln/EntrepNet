@@ -28,6 +28,7 @@ export default function PostModal() {
   const [files, setFile] = useState(null);
   
   //get the userId from the client browser
+
   const {auth} = useAuthContext()
   const senderID= auth.userID
   
@@ -36,7 +37,7 @@ export default function PostModal() {
     files: null,
   });
 
-  const handleChange = async (event) => {
+  const handleChange = (event) => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
@@ -71,23 +72,23 @@ export default function PostModal() {
       
     }
 
-
     try {
       // Send postData to server using fetch or any other method
-      let response  = await axios.post('http://localhost:8080/api/v1/post/createPost',postData,{
+      let response  = axios.post('http://localhost:8080/api/v1/post/createPost',postData,{
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
 
-      if(response.status === 200){
+     if(response.ok){
+       toast.success("you have successfully created a post") 
+     }else{
+       toast.error("an error occurred")
+       console.log(response.message)
+     }
 
-      toast.success("your post has been successfully created!")
-      }else{
-        toast.error("something wrong occured!")
-      }
 
-      setPosts(response.data)
+      
     } catch (error) {
       console.error("Error posting data:", error);
       toast.error(error)
