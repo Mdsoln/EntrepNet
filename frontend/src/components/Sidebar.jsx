@@ -17,7 +17,7 @@ export default function Sidebar() {
         
     };
   return (
-    <div className='flex flex-col gap-y-12 w-48 mx-0 bg-[#15264B] h-full'>
+    <div className='flex flex-col gap-y-12 w-48 mx-0 bg-[#15264B] h-[150vh]'>
         <Header fontSize={"text-lg"}/>
         <div><Separator orientation='horizontal' className="w-full" /></div> 
         <div className='flex flex-col gap-y-8 pl-6 '>

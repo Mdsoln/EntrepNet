@@ -30,7 +30,7 @@ export default function PostModal() {
   //get the userId from the client browser
 
   const {auth} = useAuthContext()
-  const postedFrom = auth.userID
+  const senderID= auth.userID
   
   const [formData, setFormData] = useState({
     post: "",
@@ -57,7 +57,7 @@ export default function PostModal() {
 
     const postData = new FormData();
     postData.append("post", formData.post);
-    postData.append("postedFrom",postedFrom)
+    postData.append("senderID",senderID)
 
     //check the upload limit
     if (files) {
