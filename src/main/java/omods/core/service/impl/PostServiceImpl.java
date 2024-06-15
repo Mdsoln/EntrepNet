@@ -150,7 +150,7 @@ public class PostServiceImpl implements PostService {
         PostResponseDto dto = new PostResponseDto();
         dto.setPostId(post.getPostId());
         dto.setPostContent(post.getPostContent());
-        dto.setPostImage(post.getPostImage());
+        dto.setPostImage("/images/"+post.getPostImage());
         dto.setLocation(post.getLocation());
         dto.setPostCreatedAt(post.getPostCreatedAt());
 
@@ -162,7 +162,7 @@ public class PostServiceImpl implements PostService {
         dto.setUserMobile(user.getMobile());
         dto.setUserRole(user.getRoles());
         dto.setUserJob(profile.getJob());
-        dto.setUserPicture(profile.getImagePath());
+        dto.setUserPicture("/images/"+profile.getImagePath());
 
         return dto;
     }
