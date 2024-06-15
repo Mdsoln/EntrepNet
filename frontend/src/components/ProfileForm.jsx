@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 import TopicsTabs from "./TopicsTabs";
 import axios from "axios";
 import { toast } from "sonner";
-import jwtDecode from "jwt-decode";
-import { useAuthContext } from "../context/AuthContext";
+import {jwtDecode} from "jwt-decode";
+import { useAuthContext } from "@/context/AuthContext";
 
 export default function ProfileForm({ formData }) {
   const { setAuth } = useAuthContext();
