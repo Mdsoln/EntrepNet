@@ -1,6 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import usePosts from '../zustand/usePosts'
+import Image from 'next/image'
+
 export default function FeedSection() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -11,7 +13,9 @@ export default function FeedSection() {
       setError(null)
       try {
         const res = await axios.get('http://localhost:8080/api/v1/post/recentPosts')
+         console.log(res)
         const data = res.data
+        console.log(data)
 
         if (Array.isArray(data)) {
           setPosts(data)
@@ -43,11 +47,11 @@ export default function FeedSection() {
             {/* This is for the user and the profile */}
             <div
               className="flex gap-x-1 flex-shrink items-center"
-              key={post.name}
+              key={post.userName}
             >
               <div>
                 <Image
-                  src={post.profilePic}
+                  src={post.userPicture}
                   width={40}
                   height={40}
                   alt="profile"
@@ -55,11 +59,11 @@ export default function FeedSection() {
               </div>
 
               <div className="grid grid-cols-1">
-                <div className="text-white text-sm text-nowrap">{post.name}</div>
+                <div className="text-white text-sm text-nowrap">{post.userName}</div>
                 <div className="flex space-x-1 items-center text-white">
-                  <div className="text-xs">{post.role}</div>
+                  <div className="text-xs">{post.userRole}</div>
                   <div className="text-white">|</div>
-                  <div className="text-white text-xs text-nowrap">{post.job}</div>
+                  <div className="text-white text-xs text-nowrap">{post.userJob}</div>
                 </div>
               </div>
             </div>
@@ -71,7 +75,7 @@ export default function FeedSection() {
             {/* This is the div for images */}
             <div>
               <Image
-                src={post.src}
+                src={post.postImage}
                 width={400}
                 height={250}
                 alt='Post'
