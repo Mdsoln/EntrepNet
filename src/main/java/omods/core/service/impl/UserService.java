@@ -122,7 +122,7 @@ public class UserService implements UserServiceInterface {
 
 
     @Override
-    public ResponseEntity<AuthResponse> completeProfile(String email, String job, String location, String role,String topic, MultipartFile imagePath) {
+    public ResponseEntity<AuthResponse> completeProfile(String email, String job, String location, String role,String topic, MultipartFile image) {
         try {
             User creator = userRepository.findByEmail(email);
             if (creator == null){
@@ -136,7 +136,7 @@ public class UserService implements UserServiceInterface {
             Profile profile = Profile
                     .builder()
                     .job(job)
-                    .imagePath(storeImages(imagePath))
+                    .imagePath(storeImages(image))
                     .locatedAt(location)
                     .topic(topic)
                     .user(creator)
@@ -211,26 +211,30 @@ public class UserService implements UserServiceInterface {
         return builder.toString();
     }
 
-    public String storeImages(MultipartFile imageUrl) throws IOException {
-        if (imageUrl == null || imageUrl.isEmpty()) {
-            throw new IllegalArgumentException("Image file is null or empty");
+    public String storeImages(MultipartFile image) throws IOException {
+        try {
+            if (image == null || image.isEmpty()) {
+                throw new ExceptionHandlerManager("Image file is null or empty");
+            }
+
+            String uploadDirectory = "src/main/resources/static/images";
+            String imageName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
+
+            if (imageName.contains("..")) {
+                throw new IllegalArgumentException("Invalid file format");
+            }
+
+            Path uploadPath = Paths.get(uploadDirectory);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            Path filePath = uploadPath.resolve(imageName);
+            Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            return imageName;
+        }catch (ExceptionHandlerManager exc){
+            throw new ExceptionHandlerManager("Error: "+ exc.getMessage());
         }
-
-        String uploadDirectory = "src/main/resources/static/images";
-        String imageName = StringUtils.cleanPath(Objects.requireNonNull(imageUrl.getOriginalFilename()));
-
-        if (imageName.contains("..")) {
-            throw new IllegalArgumentException("Invalid file format");
-        }
-
-        Path uploadPath = Paths.get(uploadDirectory);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        Path filePath = uploadPath.resolve(imageName);
-        Files.copy(imageUrl.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return imageName;
     }
 }

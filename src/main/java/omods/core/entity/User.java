@@ -36,6 +36,10 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
     private Profile profile;
 
+    //user can have many posts while each post belongs to one user
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Post> post;
+
     @Column(name = "reg_no",nullable = false)
     private String regNo;
 

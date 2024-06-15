@@ -11,13 +11,10 @@ import java.util.Optional;
 @Repository
 public interface PostRepo extends JpaRepository<Post,Long> {
 
-    @Query("SELECT p FROM Post p ORDER BY p.postCreatedAt DESC")
+    Optional<String> findByPostImage(String imageName);
+
+    @Query("SELECT p FROM Post p JOIN FETCH p.user u " +
+            "JOIN FETCH u.profile ORDER BY p.postCreatedAt DESC ")
     List<Post> findRecentPosts();
 
-    Optional<String> findByPostImage(String imageName);
-    //ten posts per page
-    /*
-    @Query("SELECT p FROM Post p WHERE SIZE(p) >= :minPosts ORDER BY p.createdAt DESC")
-    List<Post> findRecentPosts(@Param("minPosts") int minPosts);
-    * */
 }

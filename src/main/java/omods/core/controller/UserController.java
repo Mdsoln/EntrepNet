@@ -35,9 +35,9 @@ public class UserController {
             @RequestParam(name = "location", required = false) String location,
             @RequestParam(name = "role", required = false) String role,
             @RequestParam(name = "topic", required = false) String topic,
-            @RequestParam(name = "image", required = false) MultipartFile imagePath
+            @RequestParam(name = "image", required = false) MultipartFile image
     ){
-      return userService.completeProfile(email, job, location, role,topic, imagePath);
+      return userService.completeProfile(email, job, location, role,topic, image);
     }
 
     @CrossOrigin

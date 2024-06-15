@@ -2,6 +2,7 @@ package omods.core.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import omods.core.dto.PostResponseDto;
 import omods.core.service.impl.PostServiceImpl;
 import omods.core.entity.Post;
 import org.springframework.http.ResponseEntity;
@@ -19,25 +20,24 @@ public class PostCreationController {
 
    @CrossOrigin
    @PostMapping("/createPost")
-   public ResponseEntity<Post> createPost(
+   public ResponseEntity<PostResponseDto> createPost(
+           @RequestParam(name = "senderID") String senderID,
            @RequestParam(name = "post", required = false) String post,
            @RequestParam(name = "postedFrom", required = false) String postedFrom,
            @RequestParam(name = "file1", required = false) MultipartFile file1
            ){//list of images or one image
-      return postService.createPost(post, postedFrom, file1);
-   }
-
-
-   @CrossOrigin
-   @GetMapping("/recentPosts")
-   public ResponseEntity<List<Post>> getRecentPosts(){
-      List<Post> recentPosts = postService.getRecentPosts();
-      return ResponseEntity.ok(recentPosts);
+      return postService.createPost(senderID,post, postedFrom, file1);
    }
 
    @CrossOrigin
    @GetMapping("/image/{imageName}")
    public ResponseEntity<String> getImage(@PathVariable String imageName){
       return postService.getImagePath(imageName);
+   }
+
+   @CrossOrigin
+   @GetMapping("/recentPosts")
+   public List<PostResponseDto> getRecentPosts() {
+      return postService.getRecentPosts();
    }
 }
