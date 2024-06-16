@@ -1,3 +1,4 @@
+"use client"
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import usePosts from '../zustand/usePosts'
@@ -17,7 +18,7 @@ export default function FeedSection() {
       const data = res.data
 
       if (Array.isArray(data)) {
-        setPosts((prevPosts) => [...prevPosts, ...data]) // Append new posts to existing ones
+        setPosts(data) // Append new posts to existing ones
       } else {
         setError('Unexpected data format')
         console.log('Unexpected data format:', data)
