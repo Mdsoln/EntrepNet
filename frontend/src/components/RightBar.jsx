@@ -10,7 +10,7 @@ export default function RightBar() {
         <Notification />
         <Profile />
       </div>
-      <div className="bg-[#15264B] h-screen rounded-xl">
+      <div className="bg-[#15264B] rounded-xl">
           <div className="text-white mt-12 text-center">Suggested people</div>
            <FollowingList />
       </div>
