@@ -1,3 +1,4 @@
+
 import { Toaster, toast } from "sonner";
 import "./globals.css";
 import { AuthContextProvider } from "@/context/AuthContext";
@@ -11,12 +12,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="bg-gradient-to-br from-[#183678]  to-[#183678]">
-        <Toaster />
-        <SocketProvider>
+            <Toaster />
             <AuthContextProvider>
                 {children}
             </AuthContextProvider>
-        </SocketProvider>
       </body>
     </html>
   );
