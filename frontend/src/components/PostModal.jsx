@@ -84,7 +84,7 @@ export default function PostModal() {
 
       if (response.status === 200) {
         const newPost = response.data
-        setPosts([...posts,newPost])
+
         toast.success("You have successfully created a post");
       } else {
         toast.error("An error occurred");
