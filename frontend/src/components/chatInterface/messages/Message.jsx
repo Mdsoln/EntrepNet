@@ -2,10 +2,10 @@ import {useAuthContext} from '@/context/AuthContext'
 import useConversation from '@/zustand/store'
 export default function Message({message}) {
 
-  const fromMe = "1" === "1"
+  const fromMe = true
 
   const chatClassName = fromMe ? "chat-end" : "chat-start"
-  const profilePic = fromMe
+  const profilePic = fromMe? "path/myprofilepic.jpg":"path/sender.jpc"
   const bubbleBgColor = fromMe ? "bg-blue-500" : " "
 
   return (
