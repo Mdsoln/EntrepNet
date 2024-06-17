@@ -1,6 +1,6 @@
-"use client"
-import axios from "axios"
-import { useState } from "react";
+"use client";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import { ImLocation } from "react-icons/im";
 import { Button } from "@/components/ui/button";
 import { BiSolidImageAlt } from "react-icons/bi";
@@ -20,22 +20,22 @@ import { GoPaperAirplane } from "react-icons/go";
 import { Separator } from "./ui/separator";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import usePosts from "../zustand/usePosts.js"
+import usePosts from "../zustand/usePosts.js";
 import { useAuthContext } from "@/context/AuthContext";
-export default function PostModal() {
-  const router = useRouter()
-  
-  const [files, setFile] = useState(null);
-  
-  //get the userId from the client browser
 
-  const {auth} = useAuthContext()
-  const senderID= auth.userID
-  
+export default function PostModal() {
+  const router = useRouter();
+  const { auth } = useAuthContext();
+  const senderID = auth.userID;
+
+  const [files, setFile] = useState(null);
   const [formData, setFormData] = useState({
     post: "",
     files: null,
+    senderID: senderID || "", // Initialize with senderID
   });
+
+  const { posts,setPosts } = usePosts();
 
   const handleChange = (event) => {
     setFormData({
@@ -44,7 +44,6 @@ export default function PostModal() {
     });
   };
 
-     const {setPosts} = usePosts()
   const handleUpload = (event) => {
     const selectedFile = event.target.files;
     if (selectedFile) {
@@ -57,108 +56,111 @@ export default function PostModal() {
 
     const postData = new FormData();
     postData.append("post", formData.post);
-    postData.append("senderID",senderID)
+    postData.append("senderID", formData.senderID); // Append senderID
 
-    //check the upload limit
+    // Check the upload limit
     if (files) {
-      if(files.length>3){
-
-        alert("you have reached a maximum number of pictures to submit")
+      if (files.length > 3) {
+        alert("You have reached a maximum number of pictures to submit");
         return;
       }
-      for (let index = 0; index <files.length; index++) {
-        postData.append(`file${index+1}`,files[index]);    
+      for (let index = 0; index < files.length; index++) {
+        postData.append(`file${index + 1}`, files[index]);
       }
-      
     }
 
     try {
-      // Send postData to server using fetch or any other method
-      let response  = axios.post('http://localhost:8080/api/v1/post/createPost',postData,{
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
+      console.log(formData);
+      // Send postData to server using axios
+      const response = await axios.post(
+          "http://localhost:8080/api/v1/post/createPost",
+          postData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+      );
 
-     if(response.ok){
-       toast.success("you have successfully created a post") 
-     }else{
-       toast.error("an error occurred")
-       console.log(response.message)
-     }
-
-
-      
+      if (response.status === 200) {
+        const newPost = response.data
+        setPosts([...posts,newPost])
+        toast.success("You have successfully created a post");
+      } else {
+        toast.error("An error occurred");
+        console.log(response.message);
+      }
     } catch (error) {
       console.error("Error posting data:", error);
-      toast.error(error)
-    }finally{
+      toast.error(error);
+    } finally {
       setFormData({
         post: "",
         files: null,
-      })
+        senderID: senderID || "", // Reset senderID
+      });
     }
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className="text-white flex gap-x-4  hover:rounded-lg hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease">
-          <Pencil />
-          <div>Create post</div>
-        </div>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-[#15264B]">
-        <DialogHeader>
-          <DialogTitle className="text-white font-medium text-center">
-            Create new post
-          </DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} encType="multipart/form-data" method="post">
-          <Textarea
-            name="post"
-            id="post"
-            onChange={handleChange}
-            value={formData.post}
-            placeholder="Type your thoughts here..."
-            className="h-[250px] placeholder:text-gray-50 placeholder:text-sm bg-inherit border-none outline-none text-white"
-          />
+      <Dialog>
+        <DialogTrigger asChild>
+          <div className="text-white flex gap-x-4 hover:rounded-lg hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease">
+            <Pencil />
+            <div>Create post</div>
+          </div>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px] bg-[#15264B]">
+          <DialogHeader>
+            <DialogTitle className="text-white font-medium text-center">
+              Create new post
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} encType="multipart/form-data" method="post">
+            <Textarea
+                name="post"
+                id="post"
+                onChange={handleChange}
+                value={formData.post}
+                placeholder="Type your thoughts here..."
+                className="h-[250px] placeholder:text-gray-50 placeholder:text-sm bg-inherit border-none outline-none text-white"
+            />
 
-          <Separator orientation="horizontal" className="w-full " />
-          <DialogFooter>
-            <div className="mt-4 flex gap-x-12">
-              <div className="flex-start">
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <Label>
-                    <div>
-                      <BiSolidImageAlt className="text-white text-3xl" />
-                      <div className="text-xm text-white">Add photo</div>
-                    </div>
-                    <Input
-                      id="files"
-                      name="files"
-                      type="file"
-                      className="hidden"
-                      onChange={handleUpload}
-                      multiple
-                    />
-                  </Label>
+            <Separator orientation="horizontal" className="w-full " />
+            <DialogFooter>
+              <div className="mt-4 flex gap-x-12">
+                <div className="flex-start">
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label>
+                      <div>
+                        <BiSolidImageAlt className="text-white text-3xl" />
+                        <div className="text-xm text-white">Add photo</div>
+                      </div>
+                      <Input
+                          id="files"
+                          name="files"
+                          type="file"
+                          className="hidden"
+                          onChange={handleUpload}
+                          multiple
+                      />
+                    </Label>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <ImLocation className="text-white text-2xl" />
-                <div className="text-nowrap text-white text-xs">Tag location</div>
-              </div>
+                <div>
+                  <ImLocation className="text-white text-2xl" />
+                  <div className="text-nowrap text-white text-xs">Tag location</div>
+                </div>
 
-              <Button type="submit">
-                <div className="flex gap-2 items-center">
-                  Post <GoPaperAirplane className="text-white text-2xl" />
-                </div>
-              </Button>
-            </div>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+                <Button type="submit">
+                  <div className="flex gap-2 items-center">
+                    Post <GoPaperAirplane className="text-white text-2xl" />
+                  </div>
+                </Button>
+              </div>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
   );
 }
