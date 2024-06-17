@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -71,7 +72,6 @@ public class JwtService {
         claims.put("userID", ((User) userDetails).getRegNo()); // Add userRegNo to the claims
         claims.put("name",((User) userDetails).getName());
         claims.put("phone",((User) userDetails).getMobile());
-        claims.put("job",getJob());
         return Jwts
                 .builder()
                 .setClaims(claims)
@@ -82,9 +82,14 @@ public class JwtService {
                 .compact();
     }
 
-    private Object getJob() {
-        return profileRepo.findJob();
+    public String getJob(Long userId) {
+        return profileRepo.findJobByUserId(userId);
     }
+
+    public String getImages(Long userId) {
+        return "/images/"+profileRepo.findImagesByUserId(userId);
+    }
+
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);

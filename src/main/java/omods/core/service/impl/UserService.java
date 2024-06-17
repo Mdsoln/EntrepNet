@@ -29,9 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -143,7 +141,15 @@ public class UserService implements UserServiceInterface {
                     .build();
             profileRepo.save(profile);
 
-            var token = jwtService.generateToken(creator);
+            Map<String, Object> extraClaims = new HashMap<>();
+            extraClaims.put("role", creator.getAuthorities());
+            extraClaims.put("userID", creator.getRegNo());
+            extraClaims.put("name", creator.getName());
+            extraClaims.put("phone", creator.getMobile());
+            extraClaims.put("job", jwtService.getJob(creator.getUserID()));
+            extraClaims.put("image", jwtService.getImages(creator.getUserID()));
+
+            var token = jwtService.generateToken(extraClaims,creator);
             return ResponseEntity.ok(AuthResponse.builder().token(token).build());
         } catch (IOException e) {
             throw new RuntimeException(e);
