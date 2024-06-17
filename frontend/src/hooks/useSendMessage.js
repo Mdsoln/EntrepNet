@@ -1,17 +1,18 @@
 import {useState} from "react";
 import useConversation from "../zustand/store.js";
 import {useAuthContext} from "@/context/AuthContext";
+import {useSocketContext} from "@/context/SocketContext";
 
 const useSendMessage = () => {
-
+    const { sendMessage } = useSocketContext();
     const [loading, setLoading] = useState(false );
     const {Auth} = useAuthContext()
     const {messages, setMessages,selectedConversation}= useConversation()
     
-    const sendMessage = async ({message}) => {
+    const sendMessagefunction = async ({message}) => {
         setLoading(true)
         try {
-            
+
            const res = await fetch(`ws://localhost:8080/chat/${selectedConversation.receiverID}/${Auth.userID}`,{
                 method:"POST",
                 headers:{"content-Type":"application/json"},

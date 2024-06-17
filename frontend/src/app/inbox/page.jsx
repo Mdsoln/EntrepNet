@@ -3,6 +3,6 @@ import Conversations from '../../components/chatInterface/conversations/Conversa
 
 export default function page() {
   return (
-    <Conversations />
+   <Conversations />
   )
 }
