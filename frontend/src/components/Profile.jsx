@@ -16,12 +16,16 @@ import {useAuthContext} from '../context/AuthContext'
 export default function Profile() {
 
     const {auth} = useAuthContext()
+    const image = auth.image
+    const url ="http://localhost:8080"
 
+     const profilePic = url + image
+    console.log(profilePic)
     return (
         <Sheet>
             <SheetTrigger>
                 <Avatar>
-                    <AvatarImage src="/profile.svg" />
+                    <AvatarImage src={profilePic} />
                     <AvatarFallback>Profile</AvatarFallback>
                 </Avatar>
             </SheetTrigger>
@@ -32,8 +36,8 @@ export default function Profile() {
 
                     </SheetTitle>
                     <div className='flex justify-center'>
-                        <Image
-                            src={"/profile.svg"}
+                        <img
+                            src={profilePic}
                             width={85}
                             height={85}
                             alt='profile pic'
