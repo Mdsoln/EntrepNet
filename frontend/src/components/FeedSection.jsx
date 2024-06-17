@@ -9,7 +9,7 @@ export default function FeedSection() {
   const [error, setError] = useState(null)
   const [page, setPage] = useState(1) // Page number for pagination
   const { posts, setPosts } = usePosts()
-
+  const url ="http://localhost:8080"
   const fetchPosts = async (page) => {
     setLoading(true)
     setError(null)
@@ -64,8 +64,8 @@ export default function FeedSection() {
                       key={post.userName}
                   >
                     <div>
-                      <Image
-                          src={post.userPicture}
+                      <img
+                          src={url + post.userPicture}
                           width={40}
                           height={40}
                           alt="profile"
@@ -85,10 +85,12 @@ export default function FeedSection() {
                   {/* This is the div for tweets */}
                   <div className='text-white font-thin text-sm my-4'>{post.postContent}</div>
 
+
+                  { console.log(posts)}
                   {/* This is the div for images */}
                   <div>
-                    <Image
-                        src={post.postImage}
+                    <img
+                        src={ url + post.postImage }
                         width={400}
                         height={250}
                         alt='Post'
