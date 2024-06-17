@@ -11,10 +11,10 @@
  						/>
  					</div>
 			</div>
- <div className='flex flex-col flex-1'>
+                <div className='flex flex-col flex-1'>
  					<div className='flex gap-3 justify-between'>
-						<p className='font-bold text-gray-200'>John Doe</p>
-						<span className='text-xl'>🎃</span>
+						<p className='font-bold text-gray-200'>John </p>
+						<span className='font-bold text-gray-200'>Doe</span>
  					</div>
  				</div>
  			</div>

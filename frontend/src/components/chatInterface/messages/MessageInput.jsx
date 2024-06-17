@@ -1,4 +1,4 @@
-
+"use client"
 import {BsSend} from "react-icons/bs";
 import {useState} from "react";
 import useSendMessage from "../../../hooks/useSendMessage.js";
@@ -42,7 +42,7 @@ export default function MessageInput() {
                     className='border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 text-white'
                 />
                 <button type="submit" className="pe-3 absolute inset-y-0 end-0 flex items-center">
-                   <span className="loading loading-spinner"></span>:  <BsSend className='text-white'/>
+                   <BsSend className='text-white'/>
                 </button>
             </div>
         </form>

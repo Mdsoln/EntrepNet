@@ -3,7 +3,7 @@ import MessageInput from "@/components/chatInterface/messages/MessageInput";
 
 const MessageContainer = () => {
  	return (
- 		<div className='md:min-w-[450px] flex flex-col'>
+ 		<div className='w-full flex flex-col mr-32'>
  			<>
  				{/* Header */}
  				<div className='bg-slate-500 px-4 py-2 mb-2'>

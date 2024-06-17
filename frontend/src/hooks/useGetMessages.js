@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useConversation from "../zustand/store.js";
-import toast from "react-hot-toast";
 import {useAuthContext} from "@/context/AuthContext";
 
 const useGetMessages = () => {
