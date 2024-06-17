@@ -2,27 +2,32 @@
 import {BsSend} from "react-icons/bs";
 import {useState} from "react";
 import useSendMessage from "../../../hooks/useSendMessage.js";
+import {useSocketContext} from "@/context/SocketContext";
+import {useAuthContext} from "@/context/AuthContext";
 
 export default function MessageInput() {
-    const  {sendMessage,loading} = useSendMessage();
+    const {sendMessage} = useSocketContext();
+    const {auth} = useAuthContext()
     const [message, setMessage] = useState("");
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
 
-        console.log(message)
+        const chatMessage = {
+            sender:auth.userID, // Replace with actual sender ID
+            receiver: 2,
+            content: message,
+        };
 
         if(!message) return;
 
-          try {
-              console.log({message});
-              await sendMessage({message})
-          }catch(err){
-              console.log(err)
-          }
-
-
-        setMessage("")
+         try{
+             sendMessage('/app/chat', chatMessage);
+         }catch (e) {
+             console.log(e)
+         }finally {
+             setMessage("")
+         }
 
     }
     return (
@@ -37,7 +42,7 @@ export default function MessageInput() {
                     className='border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 text-white'
                 />
                 <button type="submit" className="pe-3 absolute inset-y-0 end-0 flex items-center">
-                    {loading?<span className="loading loading-spinner"></span>:  <BsSend className='text-white'/>}
+                   <span className="loading loading-spinner"></span>:  <BsSend className='text-white'/>
                 </button>
             </div>
         </form>
