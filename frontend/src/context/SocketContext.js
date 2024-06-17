@@ -1,51 +1,58 @@
 "use client"
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
-const SocketContext = createContext();
+const SocketContext = createContext(null);
 
-export const useSocket = () => {
-    return useContext(SocketContext);
-};
+
+export  const useSocketContext =()=>{
+    return useContext(SocketContext)
+}
 
 export const SocketProvider = ({ children }) => {
-    const socketRef = useRef(null);
+    const [stompClient, setStompClient] = useState(null);
     const [messages, setMessages] = useState([]);
-    const [connectedUsers, setConnectedUsers] = useState([]);
 
     useEffect(() => {
-        socketRef.current = new WebSocket('ws://localhost:8080/ws');
+        const socket = new SockJS('http://localhost:8080/ws');
 
-        socketRef.current.onopen = () => {
-            console.log('WebSocket connection established');
-        };
+        if(socket){
+            console.log(socket)
+        }
+        const client = new Client({
+            webSocketFactory: () => socket,
+            reconnectDelay: 5000,
+            onConnect: () => {
+                client.subscribe('/topic/messages', (msg) => {
+                    const receivedMessage = JSON.parse(msg.body);
+                    setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+                });
+            },
+        });
 
-        socketRef.current.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-            if (message.type === 'chat') {
-                setMessages((prevMessages) => [...prevMessages, message]);
-            } else if (message.type === 'userUpdate') {
-                setConnectedUsers(message.users);
-            }
-        };
-
-        socketRef.current.onclose = () => {
-            console.log('WebSocket connection closed');
-        };
+        client.activate();
+        setStompClient(client);
 
         return () => {
-            socketRef.current.close();
+            client.deactivate();
         };
     }, []);
 
-    const sendMessage = (chatMessage) => {
-        if (socketRef.current.readyState === WebSocket.OPEN) {
-            socketRef.current.send(JSON.stringify(chatMessage));
+    const sendMessage = (message) => {
+        if (stompClient) {
+            stompClient.publish({
+                destination: '/app/message',
+                body: JSON.stringify(message),
+            });
         }
     };
 
     return (
-        <SocketContext.Provider value={{ messages, connectedUsers, sendMessage }}>
+        <SocketContext.Provider value={{ messages, sendMessage }}>
             {children}
         </SocketContext.Provider>
     );
 };
+
+
