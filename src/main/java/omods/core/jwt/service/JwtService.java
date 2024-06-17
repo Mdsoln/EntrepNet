@@ -87,7 +87,7 @@ public class JwtService {
     }
 
     public String getImages(Long userId) {
-        return profileRepo.findImagesByUserId(userId);
+        return "/images/"+profileRepo.findImagesByUserId(userId);
     }
 
 
