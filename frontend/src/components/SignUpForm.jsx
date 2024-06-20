@@ -22,7 +22,7 @@ export default function SignUpForm() {
     },
     validationSchema: Yup.object({
       psw: Yup.string()
-        .min(8, "password should have atleast 8 characters")
+        .min(8, "password should have at least 8 characters")
         .required("required"),
       email: Yup.string().email("Invalid email address").required("required"),
     }),
@@ -74,7 +74,7 @@ export default function SignUpForm() {
           <Input
             id="psw"
             name="psw"
-            type="text"
+            type="password"
             placeholder="password"
             className="w-64"
             onChange={formik.handleChange}
