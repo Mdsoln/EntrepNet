@@ -28,7 +28,7 @@ export default function page() {
   }
 
   return (
-    <main className='h-full flex justify-between'>
+    <main className='min-h-screen flex justify-between'>
         <Sidebar /> 
         <FeedSection/>
         <RightBar />
