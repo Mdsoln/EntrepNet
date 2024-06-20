@@ -5,7 +5,7 @@ import MessageContainer from "@/components/chatInterface/messages/MessageContain
 
 export default function page() {
   return (
-      <div className={'flex h-full'}>
+      <div className={'flex min-h-screen'}>
         <SideBar />
 
           <MessageContainer />
