@@ -22,7 +22,7 @@ export default function SignUpForm() {
     },
     validationSchema: Yup.object({
       psw: Yup.string()
-        .min(8, "password should have atleast 8 characters")
+        .min(8, "password should have at least 8 characters")
         .required("required"),
       email: Yup.string().email("Invalid email address").required("required"),
     }),
@@ -30,8 +30,7 @@ export default function SignUpForm() {
      try {
        
           let formData = JSON.stringify(values)
-          alert(formData)
-         let res = await axios.post("http://localhost:8080/api/v1/user/login",formData)
+         let res = await axios.post("http://localhost:8080/api/v1/user/authenticate",formData)
          if(res.status === 200)
          {
              const token = res.data.token;
@@ -73,9 +72,9 @@ export default function SignUpForm() {
         
           <div>
           <Input
-            id="password"
-            name="password"
-            type="text"
+            id="psw"
+            name="psw"
+            type="password"
             placeholder="password"
             className="w-64"
             onChange={formik.handleChange}
@@ -83,7 +82,7 @@ export default function SignUpForm() {
             value={formik.values.psw}
           />
           <div className="flex gap-x-4">  
-            {formik.touched.password && formik.errors.psw? (
+            {formik.touched.psw && formik.errors.psw? (
             <span className="text-sm font-light text-red-600">{formik.errors.psw}</span>
           ) : null}
     
