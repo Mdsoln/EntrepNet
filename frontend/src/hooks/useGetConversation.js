@@ -11,7 +11,7 @@ const useGetConversation = () => {
       const getConversations = async()=>{
          setLoading(true)
         try { 
-          const res = await fetch('http://localhost:8080/api/v1/conversations');
+          const res = await fetch('http://localhost:8080/api/v1/');
           const data = await res.json()
 
           if(data.error){
