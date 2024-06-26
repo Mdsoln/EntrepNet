@@ -22,13 +22,13 @@ export default function Sidebar() {
         <div><Separator orientation='horizontal' className="w-full" /></div> 
         <div className='flex flex-col gap-y-8 pl-6 '>
              <div
-              className='text-white hover:rounded-lg flex gap-x-4 hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease'>
+              className='text-white hover:rounded-lg flex gap-x-4 hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease cursor-pointer'>
                 <Mails  /><Link href={"/inbox"}>Inbox</Link>  
             </div>
              {/* <div className='text-white hover:rounded-lg flex gap-x-4  hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease'><BsBookmarks className='text-lg font-bold'/> <div>Bookmarks</div></div> */}
                   <PostModal />
-             <div className='text-white hover:rounded-lg flex gap-x-4  hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease'><Settings /> <div>Settings</div></div>
-             <div className="text-white flex gap-x-4 hover:rounded-lg hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease"><HiOutlineSpeakerphone className='text-2xl font-extrabold'/>
+             <div className='text-white hover:rounded-lg flex gap-x-4  hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease cursor-pointer'><Settings /> <div>Settings</div></div>
+             <div className="text-white flex gap-x-4 hover:rounded-lg hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease cursor-pointer"><HiOutlineSpeakerphone className='text-2xl font-extrabold'/>
                <div><Link href={'/bankoffers'}>Bank offers</Link></div>
             </div>  
         </div> 

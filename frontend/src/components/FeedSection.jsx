@@ -5,31 +5,32 @@ import usePosts from '../zustand/usePosts'
 import Image from 'next/image'
 
 export default function FeedSection() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  // const [loading, setLoading] = useState(false)
+  // const [error, setError] = useState(null)
   const [page, setPage] = useState(1) // Page number for pagination
-  const { posts, setPosts } = usePosts()
+  const { posts, setPosts ,error,loading,fetchPosts} = usePosts()
   const url ="http://localhost:8080"
-  const fetchPosts = async (page) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const res = await axios.get(`http://localhost:8080/api/v1/post/recentPosts?page=${page}`)
-      const data = res.data
 
-      if (Array.isArray(data)) {
-        setPosts(data) // Append new posts to existing ones
-      } else {
-        setError('Unexpected data format')
-        console.log('Unexpected data format:', data)
-      }
-    } catch (error) {
-      setError('Failed to fetch posts')
-      console.log(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // const fetchPosts = async (page) => {
+  //   setLoading(true)
+  //   setError(null)
+  //   try {
+  //     const res = await axios.get(`http://localhost:8080/api/v1/post/recentPosts?page=${page}`)
+  //     const data = res.data
+
+  //     if (Array.isArray(data)) {
+  //       setPosts(data) // Append new posts to existing ones
+  //     } else {
+  //       setError('Unexpected data format')
+  //       console.log('Unexpected data format:', data)
+  //     }
+  //   } catch (error) {
+  //     setError('Failed to fetch posts')
+  //     console.log(error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   useEffect(() => {
     fetchPosts(page)
@@ -89,11 +90,11 @@ export default function FeedSection() {
                   { console.log(posts)}
                   {/* This is the div for images */}
                   <div>
-                    <img
+                    <Image
                         src={ url + post.postImage }
                         width={400}
                         height={250}
-                        alt='Post'
+                        alt={post.postImage}
                     />
                   </div>
 

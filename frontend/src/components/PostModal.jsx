@@ -7,6 +7,7 @@ import { BiSolidImageAlt } from "react-icons/bi";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -22,8 +23,10 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import usePosts from "../zustand/usePosts.js";
 import { useAuthContext } from "@/context/AuthContext";
+import Image from "next/image";
 
 export default function PostModal() {
+  const [previewUrl,setPreviewUrl] = useState(null)
   const router = useRouter();
   const { auth } = useAuthContext();
   const senderID = auth.userID;
@@ -35,7 +38,7 @@ export default function PostModal() {
     senderID: senderID || "", // Initialize with senderID
   });
 
-  const { posts,setPosts } = usePosts();
+  const { fetchPosts } = usePosts();
 
   const handleChange = (event) => {
     setFormData({
@@ -45,11 +48,27 @@ export default function PostModal() {
   };
 
   const handleUpload = (event) => {
-    const selectedFile = event.target.files;
-    if (selectedFile) {
-      setFile(selectedFile);
+    const selectedFiles = Array.from(event.target.files)
+
+    const newPreviewUrls = []
+    if (selectedFiles) {
+      setFile(selectedFiles);
+     
+      
+      selectedFiles?.forEach(element => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          newPreviewUrls.push(reader.result);
+          if (newPreviewUrls.length === selectedFiles.length){
+            setPreviewUrl(newPreviewUrls)
+          }
+        };
+        reader.readAsDataURL(element);
+      });
     }
   };
+
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -99,13 +118,16 @@ export default function PostModal() {
         files: null,
         senderID: senderID || "", // Reset senderID
       });
+      setFile(null);
+      setPreviewUrl(null);
+      fetchPosts(1)
     }
   };
 
   return (
       <Dialog>
         <DialogTrigger asChild>
-          <div className="text-white flex gap-x-4 hover:rounded-lg hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease">
+          <div className="text-white flex gap-x-4 hover:rounded-lg hover:bg-teal-50 hover:text-black hover:p-4 transition-all ease cursor-pointer">
             <Pencil />
             <div>Create post</div>
           </div>
@@ -125,6 +147,15 @@ export default function PostModal() {
                 placeholder="Type your thoughts here..."
                 className="h-[250px] placeholder:text-gray-50 placeholder:text-sm bg-inherit border-none outline-none text-white"
             />
+            <div className="flex gap-2">
+
+            {previewUrl && (
+         previewUrl?.map((item,index)=> <div key={index}>
+          <Image src={item} alt="Selected" width={100} height={100} style={{ maxWidth: '300px', maxHeight: '300px' }} />
+          <button onClick={()=>{setFile(null);setPreviewUrl(null)}} className="text-red-600">Remove Image</button>
+        </div>)
+      )}
+            </div>
 
             <Separator orientation="horizontal" className="w-full " />
             <DialogFooter>
@@ -151,12 +182,14 @@ export default function PostModal() {
                   <ImLocation className="text-white text-2xl" />
                   <div className="text-nowrap text-white text-xs">Tag location</div>
                 </div>
+                <DialogClose asChild>
 
                 <Button type="submit">
                   <div className="flex gap-2 items-center">
                     Post <GoPaperAirplane className="text-white text-2xl" />
                   </div>
                 </Button>
+                </DialogClose>
               </div>
             </DialogFooter>
           </form>
