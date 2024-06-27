@@ -65,8 +65,8 @@ export default function FeedSection() {
                       key={post.userName}
                   >
                     <div>
-                      <img
-                          src={url + post.userPicture}
+                      <Image
+                          src={url + post?.userPicture}
                           width={40}
                           height={40}
                           alt="profile"
@@ -91,10 +91,10 @@ export default function FeedSection() {
                   {/* This is the div for images */}
                   <div>
                     <Image
-                        src={ url + post.postImage }
+                        src={ url + post?.postImage }
                         width={400}
                         height={250}
-                        alt={post.postImage}
+                        alt={post?.postImage}
                     />
                   </div>
 
